@@ -1,0 +1,44 @@
+{% extends 'registration/base.html' %}
+
+{% block section %}
+
+    {% if request.user.is_authenticated %}
+        <script>
+            window.location.href = '{% url 'accounts:profile' %}'
+        </script>
+    {% endif %}
+
+    <form action="{% url 'accounts:login' %}" method="post">
+        {% csrf_token %}
+
+        <p class="h4 mb-4 fw-bold">Sing-In</p>
+
+        {% if form.errors %}
+            <div class="alert alert-primary" role="alert">
+                Error: Username or Password not correct!
+            </div>
+        {% endif %}
+        <div class="mb-3">
+            <lable class="small fw-bold">{{ form.username.lable }}</lable>
+            {{ form.username }}
+        </div>
+
+        <div class="mb-3">
+            <lable class="small fw-bold">{{ form.password.lable }}</lable>
+            {{ form.password }}
+        </div>
+
+        <div class="d-grid gap-2">
+            <button class="btn btn-dark btn-block py-2 fw-bold" type="submit" value="Log In">
+                Sing-In
+            </button>
+        </div>
+
+    </form>
+
+    <div class="d-flex justify-content-end my-1 p-1">
+        <a class="text-muted mx-3" href="{% url 'accounts:password-reset' %}">Forgotten Password?</a>
+        <a class="text-muted" href="{% url 'accounts:registration' %}">Don't have an account?</a>
+    </div>
+
+{% endblock %}

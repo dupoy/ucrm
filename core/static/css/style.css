@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=PT+Serif:wght@400;700&display=swap');
+
+.login,
+.image {
+    min-height: 100vh;
+}
+
+.bg-image {
+    background-image: url('https://picsum.photos/1080?grayscale');
+    background-size: cover;
+    background-position: center center;
+}
+
+.container-fluid {
+    max-width: 100%;
+}
+
+.account-form input {
+    border: 2px solid #ccc;
+    height: calc(2em + .75rem + 2px);
+}
+
+.account-form input:focus {
+    border-color: #1497ff;
+    box-shadow: inset 0 0px 0px rgba(0, 0, 0, 0.075), 0 0 0px rgba(255, 0, 0, 0.6);
+}

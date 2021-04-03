@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>UCRM</title>
+    {% include 'include/styles.html' %}
+</head>
+<body>
+{% block body %}
+    <header>
+        {% block header %}
+        {% endblock %}
+    </header>
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+{% endblock %}
+{% include 'include/scripts.html' %}
+</body>
+</html>
