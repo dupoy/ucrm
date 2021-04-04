@@ -50,22 +50,6 @@
 
         <div class="mb-3">
             <label class="small fw-bold">
-                {{ form.email.label }}
-                <span class="text-muted">(Required)</span>
-            </label>
-            {{ form.email }}
-        </div>
-
-        <div class="mb-3">
-            <label class="small fw-bold">
-                {{ form.phone.label }}
-                <span class="text-muted">(Required)</span>
-            </label>
-            {{ form.phone }}
-        </div>
-
-        <div class="mb-3">
-            <label class="small fw-bold">
                 {{ form.password.label }}
                 <span class="text-muted">(Required)</span>
             </label>
@@ -78,11 +62,21 @@
         </div>
 
         <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.password2.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
             {{ form.password2 }}
-            <small class="form-text text-muted mb-4">
-                Repeat password
-            </small>
         </div>
+
+        <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.email.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
+            {{ form.email }}
+        </div>
+
 
         <div class="d-grid gap-2">
             <button class="btn btn-dark btn-block py-2 mt-3 fw-bold" type="submit">Sign-up</button>

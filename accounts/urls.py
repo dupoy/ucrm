@@ -9,13 +9,13 @@ from django.urls import path
 app_name = 'accounts'
 
 urlpatterns = [
-    path('sign-in/',
+    path('login/',
          LoginView.as_view(
              template_name='registration/login.html',
              authentication_form=UserLoginForm),
          name='login'),
 
-    path('sign-off/',
+    path('logout/',
          LogoutView.as_view(
              template_name='registration/logout.html'),
          name='logout'),
@@ -39,6 +39,6 @@ urlpatterns = [
          name='password-change'),
 
     path('profile/', ProfileView.as_view(), name='profile'),
-    path('sign-up/', UserRegistrationView.as_view(), name='registration'),
+    path('registration/', UserRegistrationView.as_view(), name='registration'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
 ]

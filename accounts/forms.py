@@ -25,7 +25,7 @@ class UserLoginForm(AuthenticationForm):
 class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'phone')
+        fields = ('username', 'first_name', 'last_name', 'email')
 
     username = forms.CharField(
         label='Enter username',
@@ -76,19 +76,7 @@ class UserRegistrationForm(forms.ModelForm):
             }
         )
     )
-    phone = forms.RegexField(
-        regex=r'^\+?1?\d{9,15}$',
-        error_messages={
-            'required': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
-        },
-        max_length=15,
-        help_text='Required',
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-            }
-        )
-    )
+
     password = forms.CharField(
         label='Enter password',
         widget=forms.PasswordInput(
@@ -99,6 +87,7 @@ class UserRegistrationForm(forms.ModelForm):
         )
     )
     password2 = forms.CharField(
+        label='Repeat password',
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
