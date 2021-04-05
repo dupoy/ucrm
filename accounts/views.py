@@ -40,10 +40,11 @@ class UserRegistrationView(FormView):
 
 
 class UserUpdateView(UpdateView):
-    template_name = 'accounts/update.html'
+    template_name = 'accounts/profile_update.html'
     form_class = UserUpdateForm
     model = User
     success_url = reverse_lazy('accounts:profile')
+
 
 def activate(request, uidb64, token):
     try:

@@ -1,15 +1,15 @@
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
 from accounts.forms import UserRegistrationForm
-from company.forms import CompanyCreationForm
+from company.forms import CompanyForm
 from company.models import Company, Manager
 
 
 class CompanyCreationView(CreateView):
     template_name = 'company/company_create.html'
+    form_class = CompanyForm
     model = Company
-    form_class = CompanyCreationForm
     success_url = reverse_lazy('accounts:profile')
 
     def form_valid(self, form):
@@ -23,6 +23,19 @@ class CompanyDetailView(DetailView):
     template_name = 'company/company_detail.html'
     context_object_name = 'company'
     model = Company
+
+
+class CompanyUpdateView(UpdateView):
+    template_name = 'company/company_update.html'
+    form_class = CompanyForm
+    model = Company
+    success_url = reverse_lazy('accounts:profile')
+
+
+class CompanyDeleteView(DeleteView):
+    template_name = 'company/company_delete.html'
+    model = Company
+    success_url = reverse_lazy('accounts:profile')
 
 
 class ManagerCreationView(CreateView):

@@ -6,7 +6,7 @@ from company.models import Company
 User = get_user_model()
 
 
-class CompanyCreationForm(forms.ModelForm):
+class CompanyForm(forms.ModelForm):
     class Meta:
         model = Company
         fields = ('name', 'description', 'address', 'email', 'phone',)
@@ -63,6 +63,7 @@ class CompanyCreationForm(forms.ModelForm):
         help_text='Required',
         widget=forms.TextInput(
             attrs={
+                'placeholder': 'Company phone number',
                 'class': 'form-control',
             }
         )
