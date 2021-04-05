@@ -2,7 +2,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import TemplateView, FormView, UpdateView
+from django.views.generic import TemplateView, FormView, UpdateView, CreateView
 from accounts.forms import UserRegistrationForm, UserUpdateForm
 from django.contrib.auth import get_user_model, login
 from django.urls import reverse_lazy
@@ -26,7 +26,6 @@ class UserRegistrationView(FormView):
         user.email = form.cleaned_data['email']
         user.set_password(form.cleaned_data['password'])
         user.is_active = False
-        user.is_leader = True
         user.save()
         current_site = get_current_site(self.request)
         subject = 'Activate your account'
@@ -45,7 +44,6 @@ class UserUpdateView(UpdateView):
     form_class = UserUpdateForm
     model = User
     success_url = reverse_lazy('accounts:profile')
-
 
 def activate(request, uidb64, token):
     try:

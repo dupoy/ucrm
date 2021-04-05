@@ -10,7 +10,7 @@ class Company(models.Model):
     class Meta:
         verbose_name_plural = 'company'
 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='companies')
     name = models.CharField(max_length=255)
     description = models.TextField()
     address = models.CharField(max_length=255)
@@ -19,3 +19,14 @@ class Company(models.Model):
 
     def get_absolute_url(self):
         return reverse_lazy('company:detail', args=[self.pk])
+
+    def __str__(self):
+        return self.name
+
+
+class Manager(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    company = models.ForeignKey('Company', on_delete=models.CASCADE, related_name='managers')
+
+    def __str__(self):
+        return self.user.username

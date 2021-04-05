@@ -1,10 +1,9 @@
-import sys
 from io import BytesIO
 from PIL import Image
 from django.contrib.auth.models import AbstractUser
 from django.core.files import File
-from django.core.files.uploadedfile import InMemoryUploadedFile
 from django.db import models
+from django.db.models import ForeignKey
 
 
 def user_directory_path(instance, filename):
@@ -34,3 +33,4 @@ class User(AbstractUser):
 
     def get_name(self):
         return f'{self.first_name} {self.last_name}'
+

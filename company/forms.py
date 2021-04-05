@@ -1,6 +1,9 @@
 from django import forms
+from django.contrib.auth import get_user_model
 
 from company.models import Company
+
+User = get_user_model()
 
 
 class CompanyCreationForm(forms.ModelForm):
@@ -64,3 +67,5 @@ class CompanyCreationForm(forms.ModelForm):
             }
         )
     )
+
+

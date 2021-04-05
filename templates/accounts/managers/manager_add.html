@@ -1,0 +1,101 @@
+{% extends 'registration/base.html' %}
+
+{% block section %}
+    <form action="{% url 'company:add-manager' %}" method="post">
+        {% csrf_token %}
+        <p class="h4 mb-2 fw-bold">Create an account</p>
+        <p class="mb-4">It's free and only takes a minute.</p>
+
+        {% if form.errors %}
+            <p>Please correct the following errors:</p>
+            {% for field in form %}
+                {% if field.errors %}
+                    <div class="alert alert-primary" role="alert">
+                        {{ field.label }}: {{ field.errors|striptags }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+
+        <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.username.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
+            {{ form.username }}
+        </div>
+
+        <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.first_name.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
+            {{ form.first_name }}
+        </div>
+
+        <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.last_name.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
+            {{ form.last_name }}
+        </div>
+
+        <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.password.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
+            {{ form.password }}
+            <div id="passwordHelpBlock" class="form-text">
+                Your password can’t be too similar to your other personal information, must contain at least 8
+                characters,
+                can’t be a commonly used password,can’t be entirely numeric.
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.password2.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
+            {{ form.password2 }}
+        </div>
+
+        <div class="mb-3">
+            <label class="small fw-bold">
+                {{ form.email.label }}
+                <span class="text-muted">(Required)</span>
+            </label>
+            {{ form.email }}
+        </div>
+
+        <div class="mb-3">
+            <lable class="small fw-bold">{{ form.phone.label }}</lable>
+            <span class="text-muted">(Required)</span>
+            {{ form.phone }}
+        </div>
+
+        <div class="mb-3">
+            <lable class="small fw-bold">{{ form.bio.label }}</lable>
+            <span class="text-muted">(Required)</span>
+            {{ form.bio }}
+        </div>
+
+        <div class="mb-3">
+            <lable class="small fw-bold">{{ form.companies.label }}</lable>
+            {{ form.companies }}
+        </div>
+
+        <div class="mb-3">
+            <lable class="small fw-bold">{{ form.avatar.label }}</lable>
+            {{ form.avatar }}
+        </div>
+
+        <div class="d-grid gap-2">
+            <button class="btn btn-dark btn-block py-2 mt-3 fw-bold" type="submit">Add manager</button>
+        </div>
+
+    </form>
+
+{% endblock %}
