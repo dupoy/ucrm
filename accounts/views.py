@@ -2,8 +2,8 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import TemplateView, FormView
-from accounts.forms import UserRegistrationForm
+from django.views.generic import TemplateView, FormView, UpdateView
+from accounts.forms import UserRegistrationForm, UserUpdateForm
 from django.contrib.auth import get_user_model, login
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
@@ -38,6 +38,13 @@ class UserRegistrationView(FormView):
         })
         user.email_user(subject=subject, message=message)
         return super().form_valid(form)
+
+
+class UserUpdateView(UpdateView):
+    template_name = 'accounts/update.html'
+    form_class = UserUpdateForm
+    model = User
+    success_url = reverse_lazy('accounts:profile')
 
 
 def activate(request, uidb64, token):

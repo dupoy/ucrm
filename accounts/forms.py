@@ -25,7 +25,7 @@ class UserLoginForm(AuthenticationForm):
 class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email')
+        fields = ('username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar')
 
     username = forms.CharField(
         label='Enter username',
@@ -92,6 +92,41 @@ class UserRegistrationForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'placeholder': 'Repeat password'
+            }
+        )
+    )
+
+    phone = forms.RegexField(
+        label='Phone number',
+        regex=r'^\+?1?\d{9,15}$',
+        error_messages={
+            'required': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+        },
+        max_length=15,
+        help_text='Required',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
+    )
+
+    bio = forms.CharField(
+        label='About you',
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'About you',
+                'id': 'bio'
+            }
+        )
+    )
+
+    avatar = forms.FileField(
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'avatar'
             }
         )
     )
@@ -192,6 +227,97 @@ class UserPasswordChangeForm(PasswordChangeForm):
                 'class': 'form-control',
                 'placeholder': 'New password',
                 'id': 'form-new-pass2'
+            }
+        )
+    )
+
+
+class UserUpdateForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar']
+
+    username = forms.CharField(
+        label='Enter username',
+        min_length=4, max_length=50,
+        help_text='Required',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Username'
+            }
+        )
+    )
+
+    first_name = forms.CharField(
+        label='Enter first name',
+        min_length=4, max_length=50,
+        help_text='Required',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'First name'
+            }
+        )
+    )
+
+    last_name = forms.CharField(
+        label='Enter last name',
+        min_length=4, max_length=50,
+        help_text='Required',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Last name'
+            }
+        )
+    )
+
+    email = forms.EmailField(
+        max_length=100,
+        help_text='Required',
+        error_messages={
+            'required': 'Sorry, you will need an email'
+        },
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'Email'
+            }
+        )
+    )
+
+    phone = forms.RegexField(
+        label='Phone number',
+        regex=r'^\+?1?\d{9,15}$',
+        error_messages={
+            'required': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
+        },
+        max_length=15,
+        help_text='Required',
+        widget=forms.TextInput(
+            attrs={
+                'class': 'form-control',
+            }
+        )
+    )
+
+    bio = forms.CharField(
+        label='About you',
+        widget=forms.Textarea(
+            attrs={
+                'class': 'form-control',
+                'placeholder': 'About you',
+                'id': 'bio'
+            }
+        )
+    )
+
+    avatar = forms.FileField(
+        widget=forms.FileInput(
+            attrs={
+                'class': 'form-control',
+                'id': 'avatar'
             }
         )
     )

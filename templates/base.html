@@ -6,15 +6,10 @@
     {% include 'include/styles.html' %}
 </head>
 <body>
-{% block body %}
-    <header>
-        {% block header %}
-        {% endblock %}
-    </header>
-    <main>
-        {% block content %}
-        {% endblock %}
-    </main>
+{% block header %}
+{% endblock %}
+
+{% block content %}
 {% endblock %}
 {% include 'include/scripts.html' %}
 </body>
