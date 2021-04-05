@@ -1,184 +1,30 @@
 {% extends 'base.html' %}
 
-{% block content %}
-    <style>
-        body {
-            font-size: .875rem;
-        }
-
-        .feather {
-            width: 16px;
-            height: 16px;
-            vertical-align: text-bottom;
-        }
-
-        /*
-         * Sidebar
-         */
-
-        .sidebar {
-            position: fixed;
-            top: 0;
-            /* rtl:raw:
-            right: 0;
-            */
-            bottom: 0;
-            /* rtl:remove */
-            left: 0;
-            z-index: 100; /* Behind the navbar */
-            padding: 48px 0 0; /* Height of navbar */
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
-        }
-
-        @media (max-width: 767.98px) {
-            .sidebar {
-                top: 5rem;
-            }
-        }
-
-        .sidebar-sticky {
-            position: relative;
-            top: 0;
-            height: calc(100vh - 48px);
-            padding-top: .5rem;
-            overflow-x: hidden;
-            overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
-        }
-
-        .sidebar .nav-link {
-            font-weight: 500;
-            color: #333;
-        }
-
-        .sidebar .nav-link .feather {
-            margin-right: 4px;
-            color: #727272;
-        }
-
-        .sidebar .nav-link.active {
-            color: #007bff;
-        }
-
-        .sidebar .nav-link:hover .feather,
-        .sidebar .nav-link.active .feather {
-            color: inherit;
-        }
-
-        .sidebar-heading {
-            font-size: .75rem;
-            text-transform: uppercase;
-        }
-
-        /*
-         * Navbar
-         */
-
-        .navbar-brand {
-            padding-top: .75rem;
-            padding-bottom: .75rem;
-            font-size: 1rem;
-            background-color: rgba(0, 0, 0, .25);
-            box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
-        }
-
-        .navbar .navbar-toggler {
-            top: .25rem;
-            right: 1rem;
-        }
-
-        .navbar .form-control {
-            padding: .75rem 1rem;
-            border-width: 0;
-            border-radius: 0;
-        }
-
-        .form-control-dark {
-            color: #fff;
-            background-color: rgba(255, 255, 255, .1);
-            border-color: rgba(255, 255, 255, .1);
-        }
-
-        .form-control-dark:focus {
-            border-color: transparent;
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
-        }
-
-    </style>
+{% block header %}
     {% include 'include/header.html' %}
-    <div class="container-fluid">
-        <div class="row">
-            <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
-                <div class="d-flex  flex-column mb-3 h-100">
-                    <div class="mb-auto p-2">
-                        <ul class="nav flex-column">
-                            <li class="nav-item">
-                                <a class="nav-link active" href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="feather feather-home">
-                                        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
-                                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
-                                    </svg>
-                                    Orders
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="feather feather-shopping-cart">
-                                        <circle cx="9" cy="21" r="1"></circle>
-                                        <circle cx="20" cy="21" r="1"></circle>
-                                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
-                                    </svg>
-                                    Products
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" href="#">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
-                                         fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
-                                         stroke-linejoin="round" class="feather feather-users">
-                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
-                                        <circle cx="9" cy="7" r="4"></circle>
-                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87"></path>
-                                        <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
-                                    </svg>
-                                    Customers
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                    <hr>
-                    <div class="px-2 mb-3 mx-3">
-                        <a href="#" class="link-dark text-decoration-none dropdown-toggle"
-                           id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ request.user.avatar.url }}" alt="mdo" width="32" height="32"
-                                 class="rounded-circle me-2">
-                            <strong>{{ request.user.get_name }}</strong>
-                        </a>
-                        <ul class="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
-                            <li><a class="dropdown-item" href="{% url 'accounts:password-change' %}">Change password</a>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{% url 'accounts:profile-update' request.user.pk %}">
-                                    Update profile
-                                </a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider">
-                            </li>
-                            <li><a class="dropdown-item" href="{% url 'accounts:logout' %}">Sign out</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </nav>
+{% endblock %}
 
-            <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
-                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
-                    <h1 class="h2">Orders</h1>
-                </div>
-            </main>
+{% block content %}
+    <div class="container">
+        <div class="pricing-header p-3 pb-md-4 mx-auto text-center">
+            <h1 class="display-4 fw-normal">Companies</h1>
+            <p class="fs-5 text-muted">List of the company that is registered to your account in our crm system</p>
+            <a class="btn btn-outline-dark" href="{% url 'company:add' %}">Add company</a>
         </div>
-    </div>
+        <div class="row row-cols-1 row-cols-md-2 g-2">
+            {% for company in companies %}
+                <div class="col p-5">
+                    <h5>
+                        <a href="{{ company.get_absolute_url }}" class="text-decoration-none text-dark">{{ company.name }}</a>
+                    </h5>
+                    <h6 class="text-muted">Description</h6>
+                    <p>{{ company.description }}</p>
+                    <h5 class="">Company contact</h5>
+                    <p><span class="fw-bold">Address:</span> {{ company.address }}</p>
+                    <p><span class="fw-bold">Email:</span> {{ company.email }}</p>
+                    <p><span class="fw-bold">Phone:</span> {{ company.phone }}</p>
+                </div>
+            {% endfor %}
+        </div>
+
 {% endblock %}
