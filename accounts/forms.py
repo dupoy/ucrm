@@ -29,11 +29,6 @@ class UserRegistrationForm(forms.ModelForm):
         model = User
         fields = ('username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar')
 
-    def __init__(self, *args, **kwargs):
-        qs = kwargs['companies']
-        super(UserRegistrationForm, self).__init__(*args, **kwargs)
-        self.fields['companies'].queryset = qs
-
     username = forms.CharField(
         label='Enter username',
         min_length=4, max_length=50,
@@ -148,9 +143,6 @@ class UserRegistrationForm(forms.ModelForm):
             }
         )
     )
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
 
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
@@ -336,6 +328,16 @@ class UserUpdateForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'id': 'avatar'
+            }
+        )
+    )
+
+    companies = forms.ModelChoiceField(
+        queryset=Company.objects.none(),
+        widget=forms.Select(
+            attrs={
+                'class': 'form-control',
+                'id': 'companies'
             }
         )
     )

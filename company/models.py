@@ -35,8 +35,9 @@ class Manager(models.Model):
 
 
 @receiver(pre_delete, sender=Company)
-def delete_user(sender, instance, **kwargs):
+def delete_company(sender, instance, **kwargs):
     managers = Manager.objects.filter(company=instance)
     for manager in managers:
         user = User.objects.filter(manager=manager).first()
         user.delete()
+

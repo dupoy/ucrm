@@ -1,10 +1,13 @@
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
-from accounts.forms import UserRegistrationForm
+from accounts.forms import UserRegistrationForm, UserUpdateForm
 from company.forms import CompanyForm
 from company.mixins import AtomicMixin
 from company.models import Company, Manager, User
+
+HTTP_REFERER = None
 
 
 class CompanyCreationView(CreateView):
@@ -35,17 +38,17 @@ class CompanyUpdateView(UpdateView):
 
 class CompanyDeleteView(DeleteView):
     template_name = 'company/company_delete.html'
-    model = Company
     success_url = reverse_lazy('accounts:profile')
+    model = Company
 
 
-class ManagerCreationView(AtomicMixin, CreateView):
+class ManagerCreateView(AtomicMixin, CreateView):
     model = User
-    template_name = 'accounts/managers/manager_add.html'
+    template_name = 'managers/manager_add.html'
     success_url = reverse_lazy('company:detail')
 
     def get_form(self, form_class=UserRegistrationForm):
-        form = super(ManagerCreationView, self).get_form(form_class)
+        form = super(ManagerCreateView, self).get_form(form_class)
         form.fields['companies'].queryset = self.request.user.companies
         return form
 
@@ -58,4 +61,33 @@ class ManagerCreationView(AtomicMixin, CreateView):
             user=user,
             company=form.cleaned_data['companies']
         )
+        return super().form_valid(form)
+
+
+class ManagerDeleteView(DeleteView):
+    template_name = 'managers/manager_delete.html'
+    success_url = reverse_lazy('accounts:profile')
+    model = User
+
+
+class ManagerUpdateView(UpdateView):
+    template_name = 'managers/manager_update.html'
+    model = User
+    success_url = reverse_lazy('accounts:profile')
+
+    def get_form(self, form_class=UserUpdateForm):
+        form = super(ManagerUpdateView, self).get_form(form_class)
+        form.fields['companies'].queryset = self.request.user.companies
+        return form
+
+    def form_valid(self, form):
+        user = form.save(commit=False)
+        user.is_leader = False
+        user.is_manager = True
+        user.save()
+
+        manager = Manager.objects.get(user=user)
+        manager.company = form.cleaned_data['companies']
+        manager.save()
+
         return super().form_valid(form)
