@@ -45,7 +45,6 @@ class CompanyDeleteView(DeleteView):
 class ManagerCreateView(AtomicMixin, CreateView):
     model = User
     template_name = 'managers/manager_add.html'
-    success_url = reverse_lazy('company:detail')
 
     def get_form(self, form_class=UserRegistrationForm):
         form = super(ManagerCreateView, self).get_form(form_class)
@@ -57,10 +56,13 @@ class ManagerCreateView(AtomicMixin, CreateView):
         user.is_leader = False
         user.is_manager = True
         user.save()
-        Manager.objects.create(
+        manager = Manager.objects.create(
             user=user,
             company=form.cleaned_data['companies']
         )
+
+        self.success_url = manager.company.get_absolute_url()
+
         return super().form_valid(form)
 
 
@@ -73,7 +75,6 @@ class ManagerDeleteView(DeleteView):
 class ManagerUpdateView(UpdateView):
     template_name = 'managers/manager_update.html'
     model = User
-    success_url = reverse_lazy('accounts:profile')
 
     def get_form(self, form_class=UserUpdateForm):
         form = super(ManagerUpdateView, self).get_form(form_class)
@@ -89,5 +90,7 @@ class ManagerUpdateView(UpdateView):
         manager = Manager.objects.get(user=user)
         manager.company = form.cleaned_data['companies']
         manager.save()
+
+        self.success_url = manager.company.get_absolute_url()
 
         return super().form_valid(form)
