@@ -3,7 +3,8 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
 
 from accounts.forms import UserRegistrationForm
 from company.forms import CompanyForm
-from company.models import Company, Manager
+from company.mixins import AtomicMixin
+from company.models import Company, Manager, User
 
 
 class CompanyCreationView(CreateView):
@@ -38,10 +39,15 @@ class CompanyDeleteView(DeleteView):
     success_url = reverse_lazy('accounts:profile')
 
 
-class ManagerCreationView(CreateView):
+class ManagerCreationView(AtomicMixin, CreateView):
+    model = User
     template_name = 'accounts/managers/manager_add.html'
-    form_class = UserRegistrationForm
-    success_url = reverse_lazy('accounts:profile')
+    success_url = reverse_lazy('company:detail')
+
+    def get_form(self, form_class=UserRegistrationForm):
+        form = super(ManagerCreationView, self).get_form(form_class)
+        form.fields['companies'].queryset = self.request.user.companies
+        return form
 
     def form_valid(self, form):
         user = form.save(commit=False)
@@ -50,6 +56,6 @@ class ManagerCreationView(CreateView):
         user.save()
         Manager.objects.create(
             user=user,
-            company=form['companies']
+            company=form.cleaned_data['companies']
         )
         return super().form_valid(form)
