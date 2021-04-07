@@ -3,10 +3,14 @@ from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
 
+from core.views import LandingView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('account/', include('accounts.urls', namespace='accounts')),
-    path('companies/', include('company.urls', namespace='company')),
+    path('accounts/', include('accounts.urls', namespace='accounts')),
+    path('managers/', include('managers.urls', namespace='managers')),
+    path('companies/', include('companies.urls', namespace='companies')),
+    path('', LandingView.as_view(), name='landing')
 ]
 
 if settings.DEBUG:

@@ -1,7 +1,7 @@
 {% extends 'registration/base.html' %}
 
 {% block section %}
-    <form action="{% url 'company:add-manager' %}" method="post">
+    <form action="{% url 'companies:add-manager' %}" method="post">
         {% csrf_token %}
         <p class="h4 mb-2 fw-bold">Create an account</p>
         <p class="mb-4">It's free and only takes a minute.</p>

@@ -1,45 +1,11 @@
-from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView
-
+from django.views.generic import CreateView, DeleteView, UpdateView
 from accounts.forms import UserRegistrationForm, UserUpdateForm
-from company.forms import CompanyForm
-from company.mixins import AtomicMixin
-from company.models import Company, Manager, User
+from django.contrib.auth import get_user_model
+from companies.mixins import AtomicMixin
+from django.urls import reverse_lazy
+from managers.models import Manager
 
-HTTP_REFERER = None
-
-
-class CompanyCreationView(CreateView):
-    template_name = 'company/company_create.html'
-    form_class = CompanyForm
-    model = Company
-    success_url = reverse_lazy('accounts:profile')
-
-    def form_valid(self, form):
-        company = form.save(commit=False)
-        company.user = self.request.user
-        company.save()
-        return super().form_valid(form)
-
-
-class CompanyDetailView(DetailView):
-    template_name = 'company/company_detail.html'
-    context_object_name = 'company'
-    model = Company
-
-
-class CompanyUpdateView(UpdateView):
-    template_name = 'company/company_update.html'
-    form_class = CompanyForm
-    model = Company
-    success_url = reverse_lazy('accounts:profile')
-
-
-class CompanyDeleteView(DeleteView):
-    template_name = 'company/company_delete.html'
-    success_url = reverse_lazy('accounts:profile')
-    model = Company
+User = get_user_model()
 
 
 class ManagerCreateView(AtomicMixin, CreateView):
@@ -48,7 +14,7 @@ class ManagerCreateView(AtomicMixin, CreateView):
 
     def get_form(self, form_class=UserRegistrationForm):
         form = super(ManagerCreateView, self).get_form(form_class)
-        form.fields['companies'].queryset = self.request.user.companies
+        form.fields['companies'].queryset = self.request.user.get_company_list
         return form
 
     def form_valid(self, form):
@@ -78,7 +44,7 @@ class ManagerUpdateView(UpdateView):
 
     def get_form(self, form_class=UserUpdateForm):
         form = super(ManagerUpdateView, self).get_form(form_class)
-        form.fields['companies'].queryset = self.request.user.companies
+        form.fields['companies'].queryset = self.request.user.get_company_list
         return form
 
     def form_valid(self, form):

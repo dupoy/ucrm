@@ -35,8 +35,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'company.apps.CompanyConfig',
     'accounts.apps.AccountsConfig',
+    'managers.apps.ManagersConfig',
+    'companies.apps.CompanyConfig',
+
+    'imagekit',
+
 ]
 
 MIDDLEWARE = [
@@ -63,7 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'company.context_processor.companies'
+                # 'companies.context_processor.get_company_list'
             ],
         },
     },
@@ -121,11 +125,11 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'core/static')
+    os.path.join(BASE_DIR, 'static')
 ]
-STATIC_ROOT = 'static'
+STATIC_ROOT = 'static_root'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, 'core/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 AUTH_USER_MODEL = 'accounts.User'

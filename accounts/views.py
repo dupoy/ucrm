@@ -2,7 +2,7 @@ from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
-from django.views.generic import TemplateView, FormView, UpdateView, CreateView
+from django.views.generic import TemplateView, FormView, UpdateView, DeleteView
 from accounts.forms import UserRegistrationForm, UserUpdateForm
 from django.contrib.auth import get_user_model, login
 from django.urls import reverse_lazy
@@ -12,8 +12,8 @@ from accounts.token import account_activation_token
 User = get_user_model()
 
 
-class ProfileView(TemplateView):
-    template_name = 'accounts/profile.html'
+class UserProfileView(TemplateView):
+    template_name = 'accounts/profile_detail.html'
 
 
 class UserRegistrationView(FormView):
@@ -44,6 +44,12 @@ class UserUpdateView(UpdateView):
     form_class = UserUpdateForm
     model = User
     success_url = reverse_lazy('accounts:profile')
+
+
+class UserDeleteView(DeleteView):
+    template_name = 'accounts/profile_delete.html'
+    success_url = reverse_lazy('landing')
+    model = User
 
 
 def activate(request, uidb64, token):

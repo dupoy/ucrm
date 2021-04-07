@@ -104,7 +104,7 @@
         }
 
     </style>
-    {% include 'company/header.html' %}
+    {% include 'companies/include/header.html' %}
     <div class="container-fluid">
         <div class="row">
             <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
@@ -169,7 +169,7 @@
                     <div class="px-2 mb-3 mx-3">
                         <a href="#" class="link-dark text-decoration-none dropdown-toggle"
                            id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="{{ request.user.avatar.url }}" alt="mdo" width="32" height="32"
+                            <img src="{{ request.user.avatar_thumbnail.url }}" alt="mdo" width="32" height="32"
                                  class="rounded-circle me-2">
                             <strong>{{ request.user.get_name }}</strong>
                         </a>
@@ -193,7 +193,7 @@
             <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h1 class="h2">Managers</h1>
-                    <a href="{% url 'company:add-manager' %}" type="button" class="btn btn-sm btn-outline-dark">Add
+                    <a href="{% url 'companies:add-manager' %}" type="button" class="btn btn-sm btn-outline-dark">Add
                         manager</a>
                 </div>
                 <div class="table-responsive">
@@ -215,7 +215,7 @@
                                 <td>{{ manager.user.email }}</td>
                                 <td>{{ manager.user.phone }}</td>
                                 <td class="d-flex justify-content-end">
-                                    <a href="{% url 'company:update-manager' manager.user.pk %}"
+                                    <a href="{% url 'companies:update-manager' manager.user.pk %}"
                                        class="text-decoration-none mx-2">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor"
@@ -225,7 +225,7 @@
                                                   d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
                                         </svg>
                                     </a>
-                                    <a href="{% url 'company:delete-manager' manager.user.pk %}"
+                                    <a href="{% url 'companies:delete-manager' manager.user.pk %}"
                                        class="text-decoration-none">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor"

@@ -3,7 +3,7 @@ from django.contrib.auth.views import (
     PasswordResetConfirmView, PasswordChangeView,
 )
 from accounts.forms import UserPasswordResetForm, UserPasswordResetConfirmForm, UserPasswordChangeForm, UserLoginForm
-from accounts.views import ProfileView, activate, UserRegistrationView, UserUpdateView
+from accounts.views import UserProfileView, activate, UserRegistrationView, UserUpdateView, UserDeleteView
 from django.urls import path
 
 app_name = 'accounts'
@@ -38,8 +38,9 @@ urlpatterns = [
              form_class=UserPasswordChangeForm),
          name='password-change'),
 
-    path('profile/', ProfileView.as_view(), name='profile'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
     path('profile/<int:pk>/update/', UserUpdateView.as_view(), name='profile-update'),
+    path('profile/<int:pk>/delete/', UserDeleteView.as_view(), name='profile-delete'),
     path('registration/', UserRegistrationView.as_view(), name='registration'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
 ]
