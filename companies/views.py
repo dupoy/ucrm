@@ -1,4 +1,4 @@
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView, FormView
 from companies.forms import CompanyForm
 from django.urls import reverse_lazy
 from companies.models import Company
@@ -8,7 +8,7 @@ class CompanyCreationView(CreateView):
     template_name = 'companies/company_create.html'
     form_class = CompanyForm
     model = Company
-    success_url = reverse_lazy('accounts:profile')
+    success_url = reverse_lazy('companies:list')
 
     def form_valid(self, form):
         company = form.save(commit=False)

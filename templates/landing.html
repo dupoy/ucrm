@@ -21,6 +21,11 @@
 
 
     </style>
+    {% if request.user.is_authenticated %}
+        <script>
+            window.location.href = '{% url 'accounts:profile' %}'
+        </script>
+    {% endif %}
     <div class="container-fluid fill-height ">
         <div class="row">
             <div class="col-lg-1"></div>

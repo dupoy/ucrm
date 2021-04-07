@@ -15,4 +15,5 @@ urlpatterns = [
     path('<int:pk>/update/', CompanyUpdateView.as_view(), name='update'),
     path('<int:pk>/delete/', CompanyDeleteView.as_view(), name='delete'),
     path('', CompanyListView.as_view(), name='list'),
+
 ]

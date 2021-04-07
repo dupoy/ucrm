@@ -15,10 +15,10 @@ class Company(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='companies')
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    address = models.CharField(max_length=255)
-    phone = models.CharField(max_length=31, blank=True, help_text='Contact phone number')
-    email = models.EmailField(blank=True, help_text='Contact email')
+    description = models.TextField(blank=True)
+    address = models.CharField(max_length=255, blank=True)
+    phone = models.CharField(max_length=31, help_text='Contact phone number')
+    email = models.EmailField(help_text='Contact email')
 
     def get_absolute_url(self):
         return reverse_lazy('companies:detail', args=[self.pk])

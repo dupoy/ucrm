@@ -1,3 +1,5 @@
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout, Fieldset, ButtonHolder, Submit, MultiField, Div
 from django import forms
 from django.contrib.auth import get_user_model
 
@@ -12,61 +14,56 @@ class CompanyForm(forms.ModelForm):
         fields = ('name', 'description', 'address', 'email', 'phone',)
 
     name = forms.CharField(
+        required=True,
+        help_text='(Required)',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Company name',
-                'id': 'name'
+                'placeholder': 'Name',
             }
         )
     )
 
     description = forms.CharField(
+        max_length=500,
         widget=forms.Textarea(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Company description',
-                'id': 'description'
+                'placeholder': 'Description',
+                'rows': 3
             }
         )
     )
 
     address = forms.CharField(
-        widget=forms.Textarea(
+        widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Company address',
-                'id': 'description'
+                'placeholder': 'Address',
             }
         )
     )
 
     email = forms.EmailField(
         max_length=100,
-        help_text='Required',
-        error_messages={
-            'required': 'Sorry, you will need an email'
-        },
+        required=True,
+        help_text='(Required)',
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Email'
+                'placeholder': 'exapmple@domain.com'
             }
         )
     )
     phone = forms.RegexField(
+        required=True,
         regex=r'^\+?1?\d{9,15}$',
-        error_messages={
-            'required': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
-        },
         max_length=15,
-        help_text='Required',
+        help_text='(Required)',
         widget=forms.TextInput(
             attrs={
-                'placeholder': 'Company phone number',
+                'placeholder': '+38(099)-999-99-99',
                 'class': 'form-control',
             }
         )
     )
-
-
