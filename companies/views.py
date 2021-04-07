@@ -28,7 +28,7 @@ class CompanyListView(ListView):
 
 class CompanyDetailView(DetailView):
     template_name = 'companies/company_detail.html'
-    context_object_name = 'companies'
+    context_object_name = 'company'
     model = Company
 
 
@@ -36,7 +36,7 @@ class CompanyUpdateView(UpdateView):
     template_name = 'companies/company_update.html'
     form_class = CompanyForm
     model = Company
-    success_url = reverse_lazy('accounts:profile')
+    success_url = reverse_lazy('companies:list')
 
 
 class CompanyDeleteView(DeleteView):

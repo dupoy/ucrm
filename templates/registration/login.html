@@ -13,20 +13,18 @@
 
         <p class="h4 mb-4 fw-bold">Sing-In</p>
 
-        {% if form.errors %}
-            <div class="alert alert-primary" role="alert">
-                Error: Username or Password not correct!
+        {% for field in form %}
+            <div class="mb-3">
+                {{ field.errors }}
+                <label class="small fw-bold">
+                    {{ field.label_tag }}
+                    {% if field.help_text %}
+                        <span class="text-muted">{{ field.help_text|safe }}</span>
+                    {% endif %}
+                </label>
+                {{ field }}
             </div>
-        {% endif %}
-        <div class="mb-3">
-            <lable class="small fw-bold">{{ form.username.label }}</lable>
-            {{ form.username }}
-        </div>
-
-        <div class="mb-3">
-            <lable class="small fw-bold">{{ form.password.label }}</lable>
-            {{ form.password }}
-        </div>
+        {% endfor %}
 
         <div class="d-grid gap-2">
             <button class="btn btn-dark btn-block py-2 fw-bold" type="submit" value="Log In">

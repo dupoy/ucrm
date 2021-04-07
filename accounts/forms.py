@@ -32,7 +32,7 @@ class UserRegistrationForm(forms.ModelForm):
     username = forms.CharField(
         label='Enter username',
         min_length=4, max_length=50,
-        help_text='Required',
+        help_text='(Required)',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -44,7 +44,7 @@ class UserRegistrationForm(forms.ModelForm):
     first_name = forms.CharField(
         label='Enter first name',
         min_length=4, max_length=50,
-        help_text='Required',
+        help_text='(Required)',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -56,7 +56,7 @@ class UserRegistrationForm(forms.ModelForm):
     last_name = forms.CharField(
         label='Enter last name',
         min_length=4, max_length=50,
-        help_text='Required',
+        help_text='(Required)',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -67,10 +67,7 @@ class UserRegistrationForm(forms.ModelForm):
 
     email = forms.EmailField(
         max_length=100,
-        help_text='Required',
-        error_messages={
-            'required': 'Sorry, you will need an email'
-        },
+        help_text='(Required)',
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
@@ -101,11 +98,8 @@ class UserRegistrationForm(forms.ModelForm):
     phone = forms.RegexField(
         label='Phone number',
         regex=r'^\+?1?\d{9,15}$',
-        error_messages={
-            'required': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
-        },
         max_length=15,
-        help_text='Required',
+        help_text='(Required)',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -114,6 +108,7 @@ class UserRegistrationForm(forms.ModelForm):
     )
 
     bio = forms.CharField(
+        required=False,
         label='About you',
         widget=forms.Textarea(
             attrs={
@@ -134,20 +129,10 @@ class UserRegistrationForm(forms.ModelForm):
         )
     )
 
-    companies = forms.ModelChoiceField(
-        queryset=Company.objects.none(),
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control',
-                'id': 'companies'
-            }
-        )
-    )
-
     def clean_username(self):
         username = self.cleaned_data['username'].lower()
         if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Username is already .exists.')
+            raise forms.ValidationError('Username is already exists.')
         return username
 
     def clean_password2(self):
@@ -166,14 +151,11 @@ class UserRegistrationForm(forms.ModelForm):
 class UserPasswordResetForm(PasswordResetForm):
     email = forms.EmailField(
         max_length=100,
-        help_text='Required',
-        error_messages={
-            'required': 'Sorry, you will need an email'
-        },
+        help_text='(Required)',
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Email'
+                'placeholder': 'exapmple@domain.com'
             }
         )
     )
@@ -188,12 +170,11 @@ class UserPasswordResetForm(PasswordResetForm):
 
 class UserPasswordResetConfirmForm(SetPasswordForm):
     new_password1 = forms.CharField(
-        label='New password',
+        label='Password',
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'New password',
-                'id': 'form-new-pass'
+                'placeholder': 'Password',
             }
         )
     )
@@ -203,7 +184,6 @@ class UserPasswordResetConfirmForm(SetPasswordForm):
             attrs={
                 'class': 'form-control',
                 'placeholder': 'Repeat password',
-                'id': 'form-new-pass2'
             }
         )
     )
@@ -211,12 +191,11 @@ class UserPasswordResetConfirmForm(SetPasswordForm):
 
 class UserPasswordChangeForm(PasswordChangeForm):
     old_password = forms.CharField(
-        label='Old Password',
+        label='Password',
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Old password',
-                'id': 'form-old-pass'
+                'placeholder': 'Password',
             }
         )
     )
@@ -225,8 +204,7 @@ class UserPasswordChangeForm(PasswordChangeForm):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'New password',
-                'id': 'form-new-pass'
+                'placeholder': 'Password',
             }
         )
     )
@@ -235,8 +213,7 @@ class UserPasswordChangeForm(PasswordChangeForm):
         widget=forms.PasswordInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'New password',
-                'id': 'form-new-pass2'
+                'placeholder': 'Repeat password',
             }
         )
     )
@@ -250,7 +227,6 @@ class UserUpdateForm(forms.ModelForm):
     username = forms.CharField(
         label='Enter username',
         min_length=4, max_length=50,
-        help_text='Required',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -262,7 +238,6 @@ class UserUpdateForm(forms.ModelForm):
     first_name = forms.CharField(
         label='Enter first name',
         min_length=4, max_length=50,
-        help_text='Required',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -274,7 +249,6 @@ class UserUpdateForm(forms.ModelForm):
     last_name = forms.CharField(
         label='Enter last name',
         min_length=4, max_length=50,
-        help_text='Required',
         widget=forms.TextInput(
             attrs={
                 'class': 'form-control',
@@ -285,14 +259,10 @@ class UserUpdateForm(forms.ModelForm):
 
     email = forms.EmailField(
         max_length=100,
-        help_text='Required',
-        error_messages={
-            'required': 'Sorry, you will need an email'
-        },
         widget=forms.EmailInput(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'Email'
+                'placeholder': 'exapmple@domain.com'
             }
         )
     )
@@ -300,19 +270,17 @@ class UserUpdateForm(forms.ModelForm):
     phone = forms.RegexField(
         label='Phone number',
         regex=r'^\+?1?\d{9,15}$',
-        error_messages={
-            'required': "Phone number must be entered in the format: '+999999999'. Up to 15 digits allowed."
-        },
         max_length=15,
-        help_text='Required',
         widget=forms.TextInput(
             attrs={
+                'placeholder': '+38(099)-999-99-99',
                 'class': 'form-control',
             }
         )
     )
 
     bio = forms.CharField(
+        required=False,
         label='About you',
         widget=forms.Textarea(
             attrs={
@@ -324,20 +292,11 @@ class UserUpdateForm(forms.ModelForm):
     )
 
     avatar = forms.FileField(
+        required=False,
         widget=forms.FileInput(
             attrs={
                 'class': 'form-control',
                 'id': 'avatar'
-            }
-        )
-    )
-
-    companies = forms.ModelChoiceField(
-        queryset=Company.objects.none(),
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control',
-                'id': 'companies'
             }
         )
     )

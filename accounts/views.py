@@ -23,7 +23,6 @@ class UserRegistrationView(FormView):
 
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.email = form.cleaned_data['email']
         user.set_password(form.cleaned_data['password'])
         user.is_active = False
         user.save()

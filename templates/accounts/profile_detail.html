@@ -13,7 +13,7 @@
         <div class="row d-flex justify-content-between">
             {% with request.user as user %}
                 <div class="col-6 p-5">
-                    <div class="d-flex justify-content-between">
+                    <div class="d-flex">
                         <h5>{{ user.username }}</h5>
                         <div class="px-2">
                             <a href="{% url 'accounts:profile-update' user.pk %}" class="text-decoration-none">
