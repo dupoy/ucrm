@@ -1,8 +1,10 @@
-from django.views.generic import CreateView, DeleteView, UpdateView
+from django.views.generic import CreateView, DeleteView, UpdateView, ListView
+
+from companies.models import Company
 from managers.forms import ManagerForm, ManagerUpdateForm
 from django.contrib.auth import get_user_model
 from companies.mixins import AtomicMixin
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, resolve
 from managers.models import Manager
 
 User = get_user_model()
@@ -36,7 +38,6 @@ class ManagerCreateView(AtomicMixin, CreateView):
 
 class ManagerDeleteView(DeleteView):
     template_name = 'managers/manager_delete.html'
-    success_url = reverse_lazy('accounts:profile')
     model = User
 
     def get_success_url(self):
@@ -66,3 +67,19 @@ class ManagerUpdateView(UpdateView):
         manager.save()
 
         return super().form_valid(form)
+
+
+class ManagerListView(ListView):
+    template_name = 'companies/company_managers.html'
+    model = Manager
+    context_object_name = 'managers'
+
+    def get_queryset(self):
+        return Manager.objects.filter(company__slug=self.kwargs.get('slug'))
+
+    def get_context_data(self, **kwargs):
+        current_url = resolve(self.request.path_info).url_name
+        context = super(ManagerListView, self).get_context_data(**kwargs)
+        context['current_url'] = current_url
+        context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
+        return context

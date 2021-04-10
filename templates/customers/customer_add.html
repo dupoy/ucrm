@@ -3,8 +3,7 @@
 {% block section %}
     <form method="post">
         {% csrf_token %}
-        <p class="h4 mb-2 fw-bold">Add a manager</p>
-        <p class="mb-4">It's free and only takes a minute.</p>
+        <p class="h4 mb-4 fw-bold">Add a customer</p>
 
         {% for field in form %}
             <div class="mb-3">
@@ -20,7 +19,7 @@
         {% endfor %}
 
         <div class="d-grid gap-2">
-            <button class="btn btn-dark btn-block py-2 mt-3 fw-bold" type="submit">Add manager</button>
+            <button class="btn btn-dark btn-block py-2 mt-3 fw-bold" type="submit">Add customer</button>
         </div>
 
     </form>

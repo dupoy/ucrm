@@ -14,14 +14,15 @@ class Company(models.Model):
         verbose_name_plural = 'companies'
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='companies')
-    name = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)
+    slug = models.SlugField(unique=True)
     description = models.TextField(blank=True)
     address = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=31, help_text='Contact phone number')
     email = models.EmailField(help_text='Contact email')
 
     def get_absolute_url(self):
-        return reverse_lazy('companies:detail', args=[self.pk])
+        return reverse_lazy('companies:detail', args=[self.slug])
 
     def __str__(self):
         return self.name

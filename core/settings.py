@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'accounts.apps.AccountsConfig',
     'managers.apps.ManagersConfig',
     'companies.apps.CompanyConfig',
+    'customers.apps.CustomersConfig',
 
     'imagekit',
 

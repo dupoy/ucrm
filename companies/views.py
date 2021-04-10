@@ -1,10 +1,10 @@
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView, FormView
 from companies.forms import CompanyForm
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, resolve
 from companies.models import Company
 
 
-class CompanyCreationView(CreateView):
+class CompanyCreateView(CreateView):
     template_name = 'companies/company_create.html'
     form_class = CompanyForm
     model = Company
@@ -22,7 +22,7 @@ class CompanyListView(ListView):
     model = Company
     context_object_name = 'companies'
 
-    def queryset(self):
+    def get_queryset(self):
         return Company.objects.filter(user=self.request.user)
 
 
@@ -30,6 +30,12 @@ class CompanyDetailView(DetailView):
     template_name = 'companies/company_detail.html'
     context_object_name = 'company'
     model = Company
+
+    def get_context_data(self, **kwargs):
+        current_url = resolve(self.request.path_info).url_name
+        context = super(CompanyDetailView, self).get_context_data(**kwargs)
+        context['current_url'] = current_url
+        return context
 
 
 class CompanyUpdateView(UpdateView):
