@@ -25,7 +25,8 @@
             {% for customer in customers %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ customer.get_name }}</td>
+                    <td><a href="{% url 'customers:detail' company.slug customer.pk %}"
+                           class="text-decoration-none mx-2">{{ customer.get_name }}</a></td>
                     <td>{{ customer.date_of_birth }}</td>
                     <td>{{ customer.email }}</td>
                     <td>{{ customer.phone }}</td>

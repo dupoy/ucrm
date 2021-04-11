@@ -3,7 +3,7 @@
 
 {% block section_header %}
     <h1 class="h2">Managers</h1>
-    <a href="{% url 'managers:add' %}" type="button" class="btn btn-sm btn-outline-dark">
+    <a href="{% url 'managers:add' company.slug %}" type="button" class="btn btn-sm btn-outline-dark">
         Add manager
     </a>
 {% endblock %}
@@ -28,7 +28,7 @@
                     <td>{{ manager.user.email }}</td>
                     <td>{{ manager.user.phone }}</td>
                     <td class="d-flex justify-content-end">
-                        <a href="{% url 'managers:update' manager.user.pk %}"
+                        <a href="{% url 'managers:update' company.slug manager.user.pk %}"
                            class="text-decoration-none mx-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor"
@@ -38,7 +38,7 @@
                                       d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
                             </svg>
                         </a>
-                        <a href="{% url 'managers:delete' manager.user.pk %}"
+                        <a href="{% url 'managers:delete' company.slug manager.user.pk %}"
                            class="text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor"

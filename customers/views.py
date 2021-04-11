@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.urls import resolve, reverse_lazy
-from django.views.generic import ListView, CreateView, DeleteView, UpdateView
+from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView
 
 from companies.models import Company
 from customers.forms import CustomerForm
@@ -18,6 +18,19 @@ class CustomerListView(ListView):
     def get_context_data(self, **kwargs):
         current_url = resolve(self.request.path_info).url_name
         context = super(CustomerListView, self).get_context_data(**kwargs)
+        context['current_url'] = current_url
+        context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
+        return context
+
+
+class CustomerDetailView(DetailView):
+    template_name = 'customers/customer_detail.html'
+    model = Customer
+    context_object_name = 'customer'
+
+    def get_context_data(self, **kwargs):
+        current_url = resolve(self.request.path_info).url_name
+        context = super(CustomerDetailView, self).get_context_data(**kwargs)
         context['current_url'] = current_url
         context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
         return context

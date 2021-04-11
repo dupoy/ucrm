@@ -1,6 +1,13 @@
 from django.db import models
+from django.urls import reverse_lazy
+from imagekit.models import ImageSpecField
+from pilkit.processors import ResizeToFill
 
 from companies.models import Company
+
+
+def user_directory_path(instance, filename):
+    return f'customers/avatars/{instance}/{filename}'
 
 
 class Customer(models.Model):
@@ -11,6 +18,14 @@ class Customer(models.Model):
     email = models.EmailField(unique=True)
     note = models.TextField(max_length=500, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    avatar = models.ImageField(upload_to=user_directory_path, default='default.png')
+    avatar_thumbnail = ImageSpecField(source='avatar',
+                                      processors=[ResizeToFill(32, 32)],
+                                      format='JPEG',
+                                      options={'quality': 90})
+
+    def get_absolute_url(self):
+        return reverse_lazy('', args=[self.pk])
 
     def get_name(self):
         return f'{self.first_name} {self.last_name}'

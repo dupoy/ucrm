@@ -1,6 +1,11 @@
-from django.views.generic import CreateView, DeleteView, UpdateView, ListView
+from django.contrib.auth.base_user import BaseUserManager
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.views.generic import CreateView, DeleteView, UpdateView, ListView, DetailView
 
 from companies.models import Company
+from customers.models import Customer
 from managers.forms import ManagerForm, ManagerUpdateForm
 from django.contrib.auth import get_user_model
 from companies.mixins import AtomicMixin
@@ -13,25 +18,36 @@ User = get_user_model()
 class ManagerCreateView(AtomicMixin, CreateView):
     model = User
     template_name = 'managers/manager_add.html'
+    form_class = ManagerForm
 
     def get_success_url(self):
-        return self.object.manager.company.get_absolute_url()
-
-    def get_form(self, form_class=ManagerForm):
-        form = super(ManagerCreateView, self).get_form(form_class)
-        form.fields['companies'].queryset = self.request.user.companies
-        return form
+        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
     def form_valid(self, form):
+        password = BaseUserManager().make_random_password()
         user = form.save(commit=False)
-        user.set_password(form.cleaned_data['password'])
+        user.set_password(password)
         user.is_leader = False
         user.is_manager = True
         user.save()
         Manager.objects.create(
             user=user,
-            company=form.cleaned_data['companies']
+            company=Company.objects.get(slug=self.kwargs.get('slug'))
         )
+        send_mail(
+            subject='Your are invited to be an manager',
+            message='You were added as an agent do UCRM. Please come login to start working.',
+            from_email='admin@test.com',
+            recipient_list=[user.email]
+        )
+        current_site = get_current_site(self.request)
+        subject = 'You are invited to be an manager'
+        message = render_to_string('managers/mail.html', {
+            'user': user,
+            'domain': current_site.domain,
+            'password': password
+        })
+        user.email_user(subject=subject, message=message)
 
         return super().form_valid(form)
 
@@ -41,7 +57,7 @@ class ManagerDeleteView(DeleteView):
     model = User
 
     def get_success_url(self):
-        return self.object.manager.company.get_absolute_url()
+        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
 
 class ManagerUpdateView(UpdateView):
@@ -49,11 +65,11 @@ class ManagerUpdateView(UpdateView):
     model = User
 
     def get_success_url(self):
-        return self.object.manager.company.get_absolute_url()
+        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
     def get_form(self, form_class=ManagerUpdateForm):
         form = super(ManagerUpdateView, self).get_form(form_class)
-        form.fields['companies'].queryset = self.request.user.get_company_list
+        form.fields['companies'].queryset = self.request.user.companies
         return form
 
     def form_valid(self, form):
@@ -83,3 +99,4 @@ class ManagerListView(ListView):
         context['current_url'] = current_url
         context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
         return context
+

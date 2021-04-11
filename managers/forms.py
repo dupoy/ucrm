@@ -12,7 +12,6 @@ class ManagerForm(forms.ModelForm):
         fields = ('username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar')
 
     username = forms.CharField(
-        label='Enter username',
         min_length=4, max_length=50,
         help_text='(Required)',
         widget=forms.TextInput(
@@ -24,7 +23,6 @@ class ManagerForm(forms.ModelForm):
     )
 
     first_name = forms.CharField(
-        label='Enter first name',
         min_length=4, max_length=50,
         help_text='(Required)',
         widget=forms.TextInput(
@@ -36,7 +34,6 @@ class ManagerForm(forms.ModelForm):
     )
 
     last_name = forms.CharField(
-        label='Enter last name',
         min_length=4, max_length=50,
         help_text='(Required)',
         widget=forms.TextInput(
@@ -54,25 +51,6 @@ class ManagerForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'placeholder': 'Email'
-            }
-        )
-    )
-
-    password = forms.CharField(
-        label='Enter password',
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Password'
-            }
-        )
-    )
-    password2 = forms.CharField(
-        label='Repeat password',
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Repeat password'
             }
         )
     )
@@ -96,17 +74,6 @@ class ManagerForm(forms.ModelForm):
             attrs={
                 'class': 'form-control',
                 'placeholder': 'About you',
-                'id': 'bio'
-            }
-        )
-    )
-
-    companies = forms.ModelChoiceField(
-        queryset=Company.objects.none(),
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control',
-                'id': 'companies'
             }
         )
     )
@@ -116,7 +83,6 @@ class ManagerForm(forms.ModelForm):
         widget=forms.FileInput(
             attrs={
                 'class': 'form-control',
-                'id': 'avatar'
             }
         )
     )
@@ -126,12 +92,6 @@ class ManagerForm(forms.ModelForm):
         if User.objects.filter(username=username).exists():
             raise forms.ValidationError('Username is already exists.')
         return username
-
-    def clean_password2(self):
-        cd = self.cleaned_data
-        if cd['password'] != cd['password2']:
-            raise forms.ValidationError('Password do not match.')
-        return cd['password2']
 
     def clean_email(self):
         email = self.cleaned_data['email']
@@ -146,7 +106,7 @@ class ManagerUpdateForm(forms.ModelForm):
         fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar']
 
     username = forms.CharField(
-        label='Enter username',
+        label='Username',
         min_length=4, max_length=50,
         widget=forms.TextInput(
             attrs={
@@ -157,7 +117,7 @@ class ManagerUpdateForm(forms.ModelForm):
     )
 
     first_name = forms.CharField(
-        label='Enter first name',
+        label='First name',
         min_length=4, max_length=50,
         widget=forms.TextInput(
             attrs={
@@ -168,7 +128,7 @@ class ManagerUpdateForm(forms.ModelForm):
     )
 
     last_name = forms.CharField(
-        label='Enter last name',
+        label='Last name',
         min_length=4, max_length=50,
         widget=forms.TextInput(
             attrs={
@@ -206,8 +166,7 @@ class ManagerUpdateForm(forms.ModelForm):
         widget=forms.Textarea(
             attrs={
                 'class': 'form-control',
-                'placeholder': 'About you',
-                'id': 'bio'
+                'placeholder': 'About manager',
             }
         )
     )
@@ -217,7 +176,6 @@ class ManagerUpdateForm(forms.ModelForm):
         widget=forms.FileInput(
             attrs={
                 'class': 'form-control',
-                'id': 'avatar'
             }
         )
     )
@@ -227,7 +185,6 @@ class ManagerUpdateForm(forms.ModelForm):
         widget=forms.Select(
             attrs={
                 'class': 'form-control',
-                'id': 'companies'
             }
         )
     )
