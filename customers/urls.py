@@ -6,7 +6,6 @@ from customers.views import (
     CustomerDeleteView,
     CustomerUpdateView,
     CustomerDetailView,
-    ContactDeleteView
 )
 
 app_name = 'customers'
@@ -17,7 +16,4 @@ urlpatterns = [
     path('<slug:slug>/<int:pk>', CustomerDetailView.as_view(), name='detail'),
     path('<slug:slug>/<int:pk>/update', CustomerUpdateView.as_view(), name='update'),
     path('<slug:slug>/<int:pk>/delete', CustomerDeleteView.as_view(), name='delete'),
-
-    path('<slug:slug>/<int:customer>/<int:pk>/delete/contact', ContactDeleteView.as_view(), name='delete-contact')
-
 ]

@@ -2,8 +2,8 @@ from django.db import models
 from django.urls import reverse_lazy
 from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
-
 from companies.models import Company
+from managers.models import Manager
 
 
 def user_directory_path(instance, filename):
@@ -38,31 +38,3 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.get_name()
-
-
-class Contact(models.Model):
-    EMAIL = 'EMAIL'
-    PHONE = 'PHONE'
-    FACEBOOK = 'FACEBOOK'
-    TELEGRAM = 'TELEGRAM'
-    INSTAGRAM = 'INSTAGRAM'
-
-    CONTACT_TYPE_CHOICES = [
-        (EMAIL, 'Email'),
-        (PHONE, 'Phone'),
-        (FACEBOOK, 'Facebook'),
-        (TELEGRAM, 'Telegram'),
-        (INSTAGRAM, 'Instagram'),
-    ]
-
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='contacts')
-    picture = models.ImageField(editable=False, blank=True)
-    type = models.CharField(max_length=16, choices=CONTACT_TYPE_CHOICES)
-    value = models.CharField(max_length=255)
-
-    def save(self, *args, **kwargs):
-        self.picture = f'{self.type}.png'.lower()
-        super().save(*args, **kwargs)
-
-    def __str__(self):
-        return f'Contact {self.customer} type {self.type}: {self.value}'

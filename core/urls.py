@@ -11,6 +11,7 @@ urlpatterns = [
     path('managers/', include('managers.urls', namespace='managers')),
     path('companies/', include('companies.urls', namespace='companies')),
     path('customers/', include('customers.urls', namespace='customers')),
+    path('contacts/', include('contacts.urls', namespace='contacts')),
     path('', LandingView.as_view(), name='landing')
 ]
 
