@@ -4,7 +4,7 @@
     <h1 class="h2">Customer profile</h1>
     <div>
         <a href="{% url 'customers:update' company.slug customer.pk %}"
-           class="text-decoration-none mx-2">
+           class="text-decoration-none">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                  fill="currentColor"
                  class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -34,11 +34,31 @@
         <h4 class="mb-0 mt-2">{{ customer.get_name }}</h4>
         <p class="small text-muted mt-0 mb-2">{{ customer.date_of_birth }}</p>
         <div class="row m-0 p-0" id="contacts">
+            <div class="d-flex justify-content-between mt-2">
+                <h5>Contacts</h5>
+                <a href="{% url 'contacts:add' customer.pk %}" class="text-decoration-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-plus-circle text-success" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                    </svg>
+                </a>
+            </div>
             {% for contact in customer.contacts.all %}
                 <div class="col-11 mb-2">
                     <img src="{{ contact.picture.url }}" alt=""> {{ contact.value }}
                 </div>
                 <div class="col text-end">
+                    <a href="{% url 'contacts:update' customer.pk contact.pk %}"
+                       class="text-decoration-none">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                             fill="currentColor"
+                             class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+                            <path fill-rule="evenodd"
+                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+                        </svg>
+                    </a>
                     <a href="{% url 'contacts:delete' customer.id contact.pk %}"
                        class="text-decoration-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -50,13 +70,76 @@
                     </a>
                 </div>
             {% endfor %}
+            {% if customer.note %}
+                <p class="mt-2"><span class="h5">Notes:</span> {{ customer.note }}</p>
+            {% endif %}
+            <div class="d-flex justify-content-between mt-2">
+                <h5 class="my-2">Contact history</h5>
+                <a href="{% url 'contacts:add-history' customer.pk %}" class="text-decoration-none">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-plus-circle text-success" viewBox="0 0 16 16">
+                        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+                        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+                    </svg>
+                </a>
+            </div>
+            <table class="table border-0" id="contact_history" style="width:100%" aria-label="contact_history">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Manager</th>
+                    <th scope="col">Contact date</th>
+                    <th scope="col">Contact</th>
+                    {% if request.user.is_manager %}
+                        <th scope="col"></th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for manager in company.managers.all %}
+                    {% for contact in manager.user.contact_history.all %}
+                        <tr>
+                            <th scope="row">{{ forloop.counter }}</th>
+                            <td>{{ contact.manager.get_name }}</td>
+                            <td>{{ contact.date }}</td>
+                            <td>{{ contact.contact.value }}</td>
+                            {% if request.user.is_manager %}
+                                <td class="text-end">
+                                    <a href="{% url 'contacts:update-history' customer.pk contact.pk %}"
+                                       class="text-decoration-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z"></path>
+                                            <path fill-rule="evenodd"
+                                                  d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
+                                        </svg>
+                                    </a>
+                                    <a href="{% url 'contacts:delete-history' customer.pk contact.pk %}"
+                                       class="text-decoration-none">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor"
+                                             class="bi bi-trash text-danger" viewBox="0 0 16 16">
+                                            <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"></path>
+                                            <path fill-rule="evenodd"
+                                                  d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"></path>
+                                        </svg>
+                                    </a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-        <div class="d-grid gap-2 my-2">
-            <a href="{% url 'contacts:add' customer.pk %}" class=" btn btn-outline-dark btn-sm">Add a new contact</a>
-        </div>
-        {% if customer.note %}
-            <p><span class="h5">Notes:</span> {{ customer.note }}</p>
-        {% endif %}
-        <h5>Contact history</h5>
     </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('#contact_history').DataTable();
+        });
+    </script>
 {% endblock %}
