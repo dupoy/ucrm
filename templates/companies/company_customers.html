@@ -16,8 +16,6 @@
                 <th scope="col">#</th>
                 <th scope="col">Full name</th>
                 <th scope="col">Date of birth</th>
-                <th scope="col">Email</th>
-                <th scope="col">Phone</th>
                 <th scope="col"></th>
             </tr>
             </thead>
@@ -26,10 +24,8 @@
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td><a href="{% url 'customers:detail' company.slug customer.pk %}"
-                           class="text-decoration-none mx-2">{{ customer.get_name }}</a></td>
+                           class="text-decoration-none">{{ customer.get_name }}</a></td>
                     <td>{{ customer.date_of_birth }}</td>
-                    <td>{{ customer.email }}</td>
-                    <td>{{ customer.phone }}</td>
                     <td class="d-flex justify-content-end">
                         <a href="{% url 'customers:update' company.slug customer.pk %}"
                            class="text-decoration-none mx-2">

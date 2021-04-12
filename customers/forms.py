@@ -1,7 +1,7 @@
 from django import forms
 from django.forms.widgets import Input
 
-from customers.models import Customer
+from customers.models import Customer, Contact
 
 
 class DatePicker(Input):
@@ -57,5 +57,35 @@ class CustomerForm(forms.ModelForm):
                     'rows': '3',
                 }
             ),
+            'avatar': forms.FileInput(
+                attrs={
+                    'class': 'form-control',
+                }
+            )
         }
 
+
+class ContactForm(forms.ModelForm):
+    class Meta:
+        model = Contact
+        exclude = ['avatar', 'customer']
+        labels = {
+            'type': 'Contact type',
+            'value': 'Contact'
+        }
+        widgets = {
+            'type': forms.Select(
+                choices=Contact.CONTACT_TYPE_CHOICES,
+                attrs={
+                    'id': 'type-id',
+                    'class': 'form-control',
+
+                }
+            ),
+            'value': forms.TextInput(
+                attrs={
+                    'id': 'value-id',
+                    'class': 'form-control',
+                }
+            ),
+        }

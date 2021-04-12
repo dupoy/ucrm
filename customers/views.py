@@ -1,10 +1,11 @@
-from django.shortcuts import render
+from django.http import JsonResponse, HttpResponseRedirect, Http404
 from django.urls import resolve, reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView
+from django.views.generic.base import View
 
 from companies.models import Company
-from customers.forms import CustomerForm
-from customers.models import Customer
+from customers.forms import CustomerForm, ContactForm
+from customers.models import Customer, Contact
 
 
 class CustomerListView(ListView):
@@ -23,10 +24,14 @@ class CustomerListView(ListView):
         return context
 
 
-class CustomerDetailView(DetailView):
+class CustomerDetailView(DetailView, CreateView):
     template_name = 'customers/customer_detail.html'
     model = Customer
     context_object_name = 'customer'
+    form_class = ContactForm
+
+    def get_success_url(self):
+        return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
 
     def get_context_data(self, **kwargs):
         current_url = resolve(self.request.path_info).url_name
@@ -34,6 +39,12 @@ class CustomerDetailView(DetailView):
         context['current_url'] = current_url
         context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
         return context
+
+    def form_valid(self, form):
+        contact = form.save(commit=False)
+        contact.customer = Customer.objects.get(pk=self.kwargs.get('pk'))
+        contact.save()
+        return super().form_valid(form)
 
 
 class CustomerCreateView(CreateView):
@@ -66,3 +77,11 @@ class CustomerDeleteView(DeleteView):
 
     def get_success_url(self):
         return reverse_lazy('customers:customers', kwargs={'slug': self.kwargs.get('slug')})
+
+
+class ContactDeleteView(DeleteView):
+    template_name = 'customers/customer_contact_delete.html'
+    model = Contact
+
+    def get_success_url(self):
+        return Customer.objects.get(pk=self.kwargs.get('customer')).get_absolute_url()
