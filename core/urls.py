@@ -10,9 +10,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('contacts/', include('contacts.urls', namespace='contacts')),
     path('<slug:slug>/', include('companies.urls', namespace='companies')),
-    path('<slug:company_slug>/managers/', include('managers.urls', namespace='managers')),
-    path('<slug:company_slug>/products/', include('products.urls', namespace='products')),
-    path('<slug:company_slug>/customers/', include('customers.urls', namespace='customers')),
     path('', LandingView.as_view(), name='landing')
 ]
 

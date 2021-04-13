@@ -2,36 +2,34 @@
 
 
 {% block section_header %}
-    <h1 class="h2">Customers</h1>
-    <a href="{% url 'customers:add' company.slug %}" type="button" class="btn btn-sm btn-outline-dark">
-        Add customer
+    <h1 class="h2">Managers</h1>
+    <a href="{% url 'companies:managers:add' company.slug %}" type="button" class="btn btn-sm btn-outline-dark">
+        Add manager
     </a>
 {% endblock %}
 
 {% block section_content %}
     <div class="table-responsive">
-        <table class="table">
+        <table aria-label="managers" class="table border-0" id="managers">
             <thead>
             <tr>
                 <th scope="col">#</th>
                 <th scope="col">Full name</th>
-                <th scope="col">Date of birth</th>
+                <th scope="col">Email</th>
+                <th scope="col">Phone</th>
                 <th scope="col"></th>
             </tr>
             </thead>
             <tbody>
-            {% for customer in customers %}
+            {% for manager in managers %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td><a href="{% url 'customers:detail' company.slug customer.pk %}"
-                           class="text-decoration-none">{{ customer.get_name }}</a></td>
-                    <td>{{ customer.date_of_birth }}</td>
+                    <td>{{ manager.user.get_name }}</td>
+                    <td>{{ manager.user.email }}</td>
+                    <td>{{ manager.user.phone }}</td>
                     <td class="d-flex justify-content-end">
-                        <a href="{% url 'customers:update' company.slug customer.pk %}"
+                        <a href="{% url 'companies:managers:update' company.slug manager.user.pk %}"
                            class="text-decoration-none mx-2">
-                            <script>
-                                console.log('{{ company.slug }}')
-                            </script>
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor"
                                  class="bi bi-pencil-square" viewBox="0 0 16 16">
@@ -40,7 +38,7 @@
                                       d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
                             </svg>
                         </a>
-                        <a href="{% url 'customers:delete' company.slug customer.pk %}"
+                        <a href="{% url 'companies:managers:delete' company.slug manager.user.pk %}"
                            class="text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor"
@@ -56,6 +54,14 @@
             </tbody>
         </table>
     </div>
+     <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('#managers').DataTable();
+        });
+    </script>
 {% endblock %}
 
 

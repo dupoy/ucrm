@@ -3,7 +3,7 @@
 
 {% block section_header %}
     <h1 class="h2">Products</h1>
-    <a href="{% url 'products:add' company.slug %}" type="button" class="btn btn-sm btn-outline-dark">
+    <a href="{% url 'companies:products:add' company.slug %}" type="button" class="btn btn-sm btn-outline-dark">
         Add product
     </a>
 {% endblock %}
@@ -26,7 +26,7 @@
                     <td><a href="" class="text-decoration-none">{{ product.name }}</a></td>
                     <td>${{ product.price }}</td>
                     <td class="d-flex justify-content-end">
-                        <a href="{% url 'products:update' company.slug product.slug %}"
+                        <a href="{% url 'companies:products:update' company.slug product.slug %}"
                            class="text-decoration-none mx-2">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor"
@@ -36,7 +36,7 @@
                                       d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
                             </svg>
                         </a>
-                        <a href="{% url 'products:delete' company.slug product.slug %}" class="text-decoration-none">
+                        <a href="{% url 'companies:products:delete' company.slug product.slug %}" class="text-decoration-none">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                  fill="currentColor"
                                  class="bi bi-trash text-danger" viewBox="0 0 16 16">

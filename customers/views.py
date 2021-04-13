@@ -9,18 +9,18 @@ from customers.models import Customer
 
 
 class CustomerListView(ListView):
-    template_name = 'companies/company_customers.html'
+    template_name = 'customers/customer_list.html'
     model = Customer
     context_object_name = 'customers'
 
     def get_queryset(self):
-        return Company.objects.get(slug=self.kwargs['company_slug']).customers.all()
+        return Company.objects.get(slug=self.kwargs['slug']).customers.all()
 
     def get_context_data(self, **kwargs):
         current_url = resolve(self.request.path_info).url_name
         context = super(CustomerListView, self).get_context_data(**kwargs)
         context['current_url'] = current_url
-        context['company'] = Company.objects.get(slug=self.kwargs.get('company_slug'))
+        context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
         return context
 
 
@@ -33,7 +33,7 @@ class CustomerDetailView(DetailView):
         current_url = resolve(self.request.path_info).url_name
         context = super(CustomerDetailView, self).get_context_data(**kwargs)
         context['current_url'] = current_url
-        context['company'] = Company.objects.get(slug=self.kwargs.get('company_slug'))
+        context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
         return context
 
 
@@ -43,11 +43,11 @@ class CustomerCreateView(CreateView):
     model = Customer
 
     def get_success_url(self):
-        return reverse_lazy('customers:customers', args=(self.kwargs.get('company_slug'),))
+        return reverse_lazy('companies:customers:customers', args=(self.kwargs.get('slug'),))
 
     def form_valid(self, form):
         customer = form.save(commit=False)
-        customer.company = Company.objects.get(slug=self.kwargs.get('company_slug'))
+        customer.company = Company.objects.get(slug=self.kwargs.get('slug'))
         customer.save()
         return super().form_valid(form)
 
@@ -58,7 +58,7 @@ class CustomerUpdateView(UpdateView):
     form_class = CustomerForm
 
     def get_success_url(self):
-        return reverse_lazy('customers:customers', kwargs={'slug': self.kwargs.get('company_slug')})
+        return reverse_lazy('companies:customers:customers', kwargs={'slug': self.kwargs.get('slug')})
 
 
 class CustomerDeleteView(DeleteView):
@@ -66,4 +66,4 @@ class CustomerDeleteView(DeleteView):
     model = Customer
 
     def get_success_url(self):
-        return reverse_lazy('customers:customers', kwargs={'slug': self.kwargs.get('company_slug')})
+        return reverse_lazy('companies:customers:customers', kwargs={'slug': self.kwargs.get('slug')})

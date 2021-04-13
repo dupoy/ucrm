@@ -33,7 +33,7 @@ class Customer(models.Model):
     )
 
     def get_absolute_url(self):
-        return reverse_lazy('customers:detail', args=[self.company.slug, self.pk])
+        return reverse_lazy('companies:customers:detail', args=[self.company.slug, self.pk])
 
     def get_name(self):
         return f'{self.first_name} {self.last_name}'

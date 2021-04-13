@@ -42,7 +42,7 @@ class CompanyUpdateView(UpdateView):
     template_name = 'companies/company_update.html'
     form_class = CompanyForm
     model = Company
-    success_url = reverse_lazy('companies:list')
+    success_url = reverse_lazy('accounts:companies')
 
 
 class CompanyDeleteView(DeleteView):

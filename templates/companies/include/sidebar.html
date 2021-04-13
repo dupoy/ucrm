@@ -17,7 +17,7 @@
                 {% if request.user.is_leader %}
                     <li class="nav-item">
                         <a class="nav-link {% if current_url == 'managers' %} active {% endif %}"
-                           href="{% url 'managers:managers' company.slug %}">
+                           href="{% url 'companies:managers:managers' company.slug %}">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                  viewBox="0 0 24 24"
                                  fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -33,7 +33,7 @@
                 {% endif %}
                 <li class="nav-item">
                     <a class="nav-link {% if current_url == 'customers' %} active {% endif %}"
-                       href="{% url 'customers:customers' company.slug %}">
+                       href="{% url 'companies:customers:customers' company.slug %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round" class="feather feather-users">
@@ -58,7 +58,7 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link {% if current_url == 'products' %} active {% endif %}"
-                       href="{% url 'products:products' company.slug %}">
+                       href="{% url 'companies:products:products' company.slug %}">
                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                              fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
                              stroke-linejoin="round" class="feather feather-shopping-cart">

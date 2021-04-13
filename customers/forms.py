@@ -12,12 +12,8 @@ class CustomerForm(forms.ModelForm):
         model = Customer
         exclude = ['company']
         labels = {
-            'first_name': 'First name',
-            'last_name': 'Last name',
-            'date_of_birth': 'Date of birth',
             'email': 'Email address',
             'phone': 'Phone number',
-            'note': 'Note',
         }
         widgets = {
             'first_name': forms.TextInput(
@@ -56,11 +52,14 @@ class CustomerForm(forms.ModelForm):
                     'rows': '3',
                 }
             ),
+            'preferred_products': forms.SelectMultiple(
+                attrs={
+                    'id': 'type-id',
+                }
+            ),
             'avatar': forms.FileInput(
                 attrs={
                     'class': 'form-control',
                 }
             )
         }
-
-
