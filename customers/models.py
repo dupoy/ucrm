@@ -4,6 +4,7 @@ from imagekit.models import ImageSpecField
 from pilkit.processors import ResizeToFill
 from companies.models import Company
 from managers.models import Manager
+from products.models import Product
 
 
 def user_directory_path(instance, filename):
@@ -15,7 +16,8 @@ class Customer(models.Model):
     last_name = models.CharField(max_length=255)
     date_of_birth = models.DateField()
     note = models.TextField(max_length=500, blank=True)
-    company = models.ForeignKey(Company, on_delete=models.CASCADE)
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='customers')
+    preferred_products = models.ManyToManyField(Product)
     avatar = models.ImageField(upload_to=user_directory_path, default='default.png')
     medium_avatar = ImageSpecField(
         source='avatar',

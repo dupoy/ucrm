@@ -11,9 +11,9 @@ from customers.views import (
 app_name = 'customers'
 
 urlpatterns = [
-    path('<slug:slug>/', CustomerListView.as_view(), name='customers'),
-    path('<slug:slug>/add', CustomerCreateView.as_view(), name='add'),
-    path('<slug:slug>/<int:pk>', CustomerDetailView.as_view(), name='detail'),
-    path('<slug:slug>/<int:pk>/update', CustomerUpdateView.as_view(), name='update'),
-    path('<slug:slug>/<int:pk>/delete', CustomerDeleteView.as_view(), name='delete'),
+    path('', CustomerListView.as_view(), name='customers'),
+    path('add/', CustomerCreateView.as_view(), name='add'),
+    path('<int:pk>/', CustomerDetailView.as_view(), name='detail'),
+    path('update/<int:pk>/', CustomerUpdateView.as_view(), name='update'),
+    path('delete/<int:pk>/', CustomerDeleteView.as_view(), name='delete'),
 ]

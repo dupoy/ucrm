@@ -21,7 +21,7 @@ class ManagerCreateView(AtomicMixin, CreateView):
     form_class = ManagerForm
 
     def get_success_url(self):
-        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('slug')})
+        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('company_slug')})
 
     def form_valid(self, form):
         password = BaseUserManager().make_random_password()
@@ -32,7 +32,7 @@ class ManagerCreateView(AtomicMixin, CreateView):
         user.save()
         Manager.objects.create(
             user=user,
-            company=Company.objects.get(slug=self.kwargs.get('slug'))
+            company=Company.objects.get(slug=self.kwargs.get('company_slug'))
         )
         send_mail(
             subject='Your are invited to be an manager',
@@ -57,7 +57,7 @@ class ManagerDeleteView(DeleteView):
     model = User
 
     def get_success_url(self):
-        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('slug')})
+        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('company_slug')})
 
 
 class ManagerUpdateView(UpdateView):
@@ -65,7 +65,7 @@ class ManagerUpdateView(UpdateView):
     model = User
 
     def get_success_url(self):
-        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('slug')})
+        return reverse_lazy('managers:managers', kwargs={'slug': self.kwargs.get('company_slug')})
 
     def get_form(self, form_class=ManagerUpdateForm):
         form = super(ManagerUpdateView, self).get_form(form_class)
@@ -91,12 +91,12 @@ class ManagerListView(ListView):
     context_object_name = 'managers'
 
     def get_queryset(self):
-        return Manager.objects.filter(company__slug=self.kwargs.get('slug'))
+        return Company.objects.get(slug=self.kwargs.get('company_slug')).managers.all()
 
     def get_context_data(self, **kwargs):
         current_url = resolve(self.request.path_info).url_name
         context = super(ManagerListView, self).get_context_data(**kwargs)
         context['current_url'] = current_url
-        context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
+        context['company'] = Company.objects.get(slug=self.kwargs.get('company_slug'))
         return context
 

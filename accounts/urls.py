@@ -6,6 +6,8 @@ from accounts.forms import UserPasswordResetForm, UserPasswordResetConfirmForm, 
 from accounts.views import UserProfileView, activate, UserRegistrationView, UserUpdateView, UserDeleteView
 from django.urls import path
 
+from companies.views import CompanyListView, CompanyCreateView, CompanyUpdateView, CompanyDeleteView
+
 app_name = 'accounts'
 
 urlpatterns = [
@@ -38,9 +40,15 @@ urlpatterns = [
              form_class=UserPasswordChangeForm),
          name='password-change'),
 
-    path('profile/', UserProfileView.as_view(), name='profile'),
-    path('profile/<int:pk>/update/', UserUpdateView.as_view(), name='profile-update'),
-    path('profile/<int:pk>/delete/', UserDeleteView.as_view(), name='profile-delete'),
-    path('registration/', UserRegistrationView.as_view(), name='registration'),
     path('activate/<uidb64>/<token>/', activate, name='activate'),
+    path('registration/', UserRegistrationView.as_view(), name='registration'),
+
+    path('profile/', UserProfileView.as_view(), name='profile'),
+    path('profile/update/<int:pk>/', UserUpdateView.as_view(), name='profile-update'),
+    path('profile/delete/<int:pk>/', UserDeleteView.as_view(), name='profile-delete'),
+
+    path('profile/companies/', CompanyListView.as_view(), name='companies'),
+    path('profile/companies/add/', CompanyCreateView.as_view(), name='companies-add'),
+    path('profile/companies/update/<slug:slug>/', CompanyUpdateView.as_view(), name='companies-update'),
+    path('profile/companies/delete/<slug:slug>/', CompanyDeleteView.as_view(), name='companies-delete'),
 ]
