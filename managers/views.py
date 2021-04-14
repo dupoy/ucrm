@@ -5,6 +5,7 @@ from django.template.loader import render_to_string
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView, DetailView
 
 from companies.models import Company
+from core.mixins import PreviousPageMixin, ModelNameMixin, LinkMixin
 from customers.models import Customer
 from managers.forms import ManagerForm, ManagerUpdateForm
 from django.contrib.auth import get_user_model
@@ -15,7 +16,16 @@ from managers.models import Manager
 User = get_user_model()
 
 
-class ManagerCreateView(AtomicMixin, CreateView):
+class ManagerListView(LinkMixin, ListView):
+    template_name = 'managers/manager_list.html'
+    model = Manager
+    context_object_name = 'managers'
+
+    def get_queryset(self):
+        return Company.objects.get(slug=self.kwargs.get('slug')).managers.all()
+
+
+class ManagerCreateView(AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateView):
     model = Manager
     template_name = 'bases/actions/base_add.html'
     form_class = ManagerForm
@@ -51,28 +61,16 @@ class ManagerCreateView(AtomicMixin, CreateView):
 
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(ManagerCreateView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class ManagerDeleteView(DeleteView):
+class ManagerDeleteView(PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     model = User
 
     def get_success_url(self):
         return reverse_lazy('companies:managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
-    def get_context_data(self, **kwargs):
-        context = super(ManagerDeleteView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class ManagerUpdateView(UpdateView):
+class ManagerUpdateView(PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     model = User
 
@@ -95,26 +93,3 @@ class ManagerUpdateView(UpdateView):
         manager.save()
 
         return super().form_valid(form)
-
-    def get_context_data(self, **kwargs):
-        context = super(ManagerUpdateView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
-
-
-class ManagerListView(ListView):
-    template_name = 'managers/manager_list.html'
-    model = Manager
-    context_object_name = 'managers'
-
-    def get_queryset(self):
-        return Company.objects.get(slug=self.kwargs.get('slug')).managers.all()
-
-    def get_context_data(self, **kwargs):
-        current_url = resolve(self.request.path_info).url_name
-        context = super(ManagerListView, self).get_context_data(**kwargs)
-        context['current_url'] = current_url
-        context['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
-        return context
-

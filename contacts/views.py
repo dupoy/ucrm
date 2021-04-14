@@ -2,10 +2,11 @@ from django.views.generic import DeleteView, CreateView, UpdateView
 
 from contacts.forms import ContactForm, ContactHistoryForm
 from contacts.models import Contact, ContactHistory
+from core.mixins import PreviousPageMixin, ModelNameMixin
 from customers.models import Customer
 
 
-class ContactCreateView(CreateView):
+class ContactCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     model = Contact
     form_class = ContactForm
@@ -20,14 +21,8 @@ class ContactCreateView(CreateView):
         contact.save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(ContactCreateView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class ContactUpdateView(UpdateView):
+class ContactUpdateView(PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     form_class = ContactForm
     model = Contact
@@ -38,14 +33,8 @@ class ContactUpdateView(UpdateView):
     def get_success_url(self):
         return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
 
-    def get_context_data(self, **kwargs):
-        context = super(ContactUpdateView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class ContactDeleteView(DeleteView):
+class ContactDeleteView(PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     model = Contact
 
@@ -55,14 +44,8 @@ class ContactDeleteView(DeleteView):
     def get_success_url(self):
         return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
 
-    def get_context_data(self, **kwargs):
-        context = super(ContactDeleteView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class ContactHistoryCreate(CreateView):
+class ContactHistoryCreate(ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     model = ContactHistory
 
@@ -80,14 +63,8 @@ class ContactHistoryCreate(CreateView):
         contact_history.save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(ContactHistoryCreate, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class ContactHistoryUpdate(UpdateView):
+class ContactHistoryUpdate(PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     model = ContactHistory
 
@@ -108,14 +85,8 @@ class ContactHistoryUpdate(UpdateView):
         contact_history.save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(ContactHistoryUpdate, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class ContactHistoryDelete(DeleteView):
+class ContactHistoryDelete(PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     model = ContactHistory
 
@@ -124,10 +95,3 @@ class ContactHistoryDelete(DeleteView):
 
     def get_success_url(self):
         return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
-
-
-def get_context_data(self, **kwargs):
-    context = super(ContactHistoryDelete, self).get_context_data(**kwargs)
-    context['previous'] = self.request.META.get('HTTP_REFERER')
-    context['model_name'] = self.model.__name__
-    return context

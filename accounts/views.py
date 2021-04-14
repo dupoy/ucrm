@@ -8,6 +8,7 @@ from django.contrib.auth import get_user_model, login
 from django.urls import reverse_lazy
 from django.shortcuts import render, redirect
 from accounts.token import account_activation_token
+from core.mixins import PreviousPageMixin
 
 User = get_user_model()
 
@@ -38,29 +39,17 @@ class UserRegistrationView(FormView):
         return super().form_valid(form)
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     form_class = UserUpdateForm
     model = User
     success_url = reverse_lazy('accounts:profile')
 
-    def get_context_data(self, **kwargs):
-        context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class UserDeleteView(DeleteView):
+class UserDeleteView(PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     success_url = reverse_lazy('landing')
     model = User
-
-    def get_context_data(self, **kwargs):
-        context = super(UserDeleteView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
 
 def activate(request, uidb64, token):

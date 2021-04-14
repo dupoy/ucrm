@@ -2,9 +2,10 @@ from django.views.generic import CreateView, DetailView, UpdateView, DeleteView,
 from companies.forms import CompanyForm
 from django.urls import reverse_lazy, resolve
 from companies.models import Company
+from core.mixins import PreviousPageMixin, ModelNameMixin, LinkMixin
 
 
-class CompanyCreateView(CreateView):
+class CompanyCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     form_class = CompanyForm
     model = Company
@@ -16,12 +17,6 @@ class CompanyCreateView(CreateView):
         company.save()
         return super().form_valid(form)
 
-    def get_context_data(self, **kwargs):
-        context = super(CompanyCreateView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
-
 
 class CompanyListView(ListView):
     template_name = 'companies/company_list.html'
@@ -32,38 +27,20 @@ class CompanyListView(ListView):
         return Company.objects.filter(user=self.request.user)
 
 
-class CompanyDetailView(DetailView):
+class CompanyDetailView(LinkMixin, DetailView):
     template_name = 'companies/company_detail.html'
     context_object_name = 'company'
     model = Company
 
-    def get_context_data(self, **kwargs):
-        current_url = resolve(self.request.path_info).url_name
-        context = super(CompanyDetailView, self).get_context_data(**kwargs)
-        context['current_url'] = current_url
-        return context
 
-
-class CompanyUpdateView(UpdateView):
+class CompanyUpdateView(PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     form_class = CompanyForm
     model = Company
     success_url = reverse_lazy('accounts:companies')
 
-    def get_context_data(self, **kwargs):
-        context = super(CompanyUpdateView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
 
-
-class CompanyDeleteView(DeleteView):
+class CompanyDeleteView(PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     success_url = reverse_lazy('accounts:profile')
     model = Company
-
-    def get_context_data(self, **kwargs):
-        context = super(CompanyDeleteView, self).get_context_data(**kwargs)
-        context['previous'] = self.request.META.get('HTTP_REFERER')
-        context['model_name'] = self.model.__name__
-        return context
