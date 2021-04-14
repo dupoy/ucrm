@@ -92,7 +92,7 @@ class ContactHistoryUpdate(UpdateView):
     model = ContactHistory
 
     def get_object(self, queryset=None):
-        return Contact.objects.get(pk=self.kwargs.get('pk_contact_history'))
+        return ContactHistory.objects.get(pk=self.kwargs.get('pk_contact_history'))
 
     def get_success_url(self):
         return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
@@ -120,7 +120,7 @@ class ContactHistoryDelete(DeleteView):
     model = ContactHistory
 
     def get_object(self, queryset=None):
-        return Contact.objects.get(pk=self.kwargs.get('pk_contact_history'))
+        return ContactHistory.objects.get(pk=self.kwargs.get('pk_contact_history'))
 
     def get_success_url(self):
         return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()

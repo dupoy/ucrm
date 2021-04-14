@@ -1,4 +1,5 @@
 from django.http import JsonResponse, HttpResponseRedirect, Http404
+from django.shortcuts import get_object_or_404
 from django.urls import resolve, reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView, UpdateView, DetailView
 from django.views.generic.base import View
@@ -6,6 +7,7 @@ from django.views.generic.base import View
 from companies.models import Company
 from customers.forms import CustomerForm
 from customers.models import Customer
+from products.models import Product
 
 
 class CustomerListView(ListView):
@@ -83,3 +85,11 @@ class CustomerDeleteView(DeleteView):
         context = super(CustomerDeleteView, self).get_context_data(**kwargs)
         context['previous'] = self.request.META.get('HTTP_REFERER')
         return context
+
+
+def remove_preferred_product(request, slug, pk, pk_product):
+    customer = get_object_or_404(Customer, pk=pk)
+    product = get_object_or_404(Product, pk=pk_product)
+    customer.preferred_products.remove(product)
+    customer.save()
+    return HttpResponseRedirect(request.META.get('HTTP_REFERER'))

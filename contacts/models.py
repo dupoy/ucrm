@@ -35,3 +35,6 @@ class ContactHistory(models.Model):
     manager = models.ForeignKey(User, on_delete=models.CASCADE, related_name='contact_history')
     contact = models.ForeignKey(Contact, on_delete=models.CASCADE, related_name='contact_history')
     date = models.DateTimeField()
+
+    def __str__(self):
+        return self.contact.__str__()
