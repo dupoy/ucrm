@@ -5,7 +5,7 @@ from companies.models import Company
 
 
 class CompanyCreateView(CreateView):
-    template_name = 'companies/company_create.html'
+    template_name = 'bases/actions/base_add.html'
     form_class = CompanyForm
     model = Company
     success_url = reverse_lazy('companies:list')
@@ -15,6 +15,12 @@ class CompanyCreateView(CreateView):
         company.user = self.request.user
         company.save()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(CompanyCreateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
 
 
 class CompanyListView(ListView):
@@ -39,13 +45,25 @@ class CompanyDetailView(DetailView):
 
 
 class CompanyUpdateView(UpdateView):
-    template_name = 'companies/company_update.html'
+    template_name = 'bases/actions/base_update.html'
     form_class = CompanyForm
     model = Company
     success_url = reverse_lazy('accounts:companies')
 
+    def get_context_data(self, **kwargs):
+        context = super(CompanyUpdateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class CompanyDeleteView(DeleteView):
-    template_name = 'companies/company_delete.html'
+    template_name = 'bases/actions/base_delete.html'
     success_url = reverse_lazy('accounts:profile')
     model = Company
+
+    def get_context_data(self, **kwargs):
+        context = super(CompanyDeleteView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context

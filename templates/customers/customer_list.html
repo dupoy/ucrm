@@ -1,4 +1,4 @@
-{% extends 'companies/base.html' %}
+{% extends 'bases/company_base.html' %}
 
 
 {% block section_header %}
@@ -10,7 +10,7 @@
 
 {% block section_content %}
     <div class="table-responsive">
-        <table aria-label="customers" class="table 0" id="customers">
+        <table aria-label="customers" class="table border-0" id="customers">
             <thead>
             <tr>
                 <th scope="col">#</th>
@@ -21,10 +21,11 @@
             </thead>
             <tbody>
             {% for customer in customers %}
-                <tr">
+                <tr>
                     <th scope="row">{{ forloop.counter }}</th>
                     <td><a href="{% url 'companies:customers:detail' company.slug customer.pk %}"
-                           class="text-decoration-none">{{ customer.get_name }}</a></td>
+                           class="text-decoration-none">{{ customer.get_name }}</a>
+                    </td>
                     <td>{{ customer.date_of_birth }}</td>
                     <td class="d-flex justify-content-end">
                         <a href="{% url 'companies:customers:update' company.slug customer.pk %}"

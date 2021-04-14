@@ -8,7 +8,7 @@ from products.models import Product
 
 
 class ProductCreateView(CreateView):
-    template_name = 'products/product_add.html'
+    template_name = 'bases/actions/base_add.html'
     model = Product
     form_class = ProductForm
 
@@ -20,6 +20,12 @@ class ProductCreateView(CreateView):
         product.company = Company.objects.get(slug=self.kwargs['slug'])
         product.save()
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductCreateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
 
 
 class ProductListView(ListView):
@@ -39,7 +45,7 @@ class ProductListView(ListView):
 
 
 class ProductUpdateView(UpdateView):
-    template_name = 'products/product_update.html'
+    template_name = 'bases/actions/base_update.html'
     slug_url_kwarg = 'product_slug'
     form_class = ProductForm
     model = Product
@@ -47,11 +53,23 @@ class ProductUpdateView(UpdateView):
     def get_success_url(self):
         return reverse_lazy('companies:products:products', kwargs={'slug': self.kwargs.get('slug')})
 
+    def get_context_data(self, **kwargs):
+        context = super(ProductUpdateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class ProductDeleteView(DeleteView):
-    template_name = 'products/product_delete.html'
+    template_name = 'bases/actions/base_delete.html'
     slug_url_kwarg = 'product_slug'
     model = Product
 
     def get_success_url(self):
         return reverse_lazy('companies:products:products', kwargs={'slug': self.kwargs.get('slug')})
+
+    def get_context_data(self, **kwargs):
+        context = super(ProductDeleteView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context

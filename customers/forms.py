@@ -54,7 +54,8 @@ class CustomerForm(forms.ModelForm):
             ),
             'preferred_products': forms.SelectMultiple(
                 attrs={
-                    'id': 'type-id',
+                    'class': 'form-control',
+                    'id': 'preferred-products-id',
                 }
             ),
             'avatar': forms.FileInput(

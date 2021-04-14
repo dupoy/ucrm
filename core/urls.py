@@ -8,7 +8,6 @@ from core.views import LandingView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    path('contacts/', include('contacts.urls', namespace='contacts')),
     path('<slug:slug>/', include('companies.urls', namespace='companies')),
     path('', LandingView.as_view(), name='landing')
 ]

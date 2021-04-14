@@ -1,4 +1,4 @@
-from django.urls import path
+from django.urls import path, include
 
 from customers.views import (
     CustomerListView,
@@ -16,4 +16,6 @@ urlpatterns = [
     path('<int:pk>/', CustomerDetailView.as_view(), name='detail'),
     path('update/<int:pk>/', CustomerUpdateView.as_view(), name='update'),
     path('delete/<int:pk>/', CustomerDeleteView.as_view(), name='delete'),
+
+    path('<int:pk>/contacts/', include('contacts.urls', namespace='contacts')),
 ]

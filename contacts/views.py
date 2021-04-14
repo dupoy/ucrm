@@ -6,7 +6,7 @@ from customers.models import Customer
 
 
 class ContactCreateView(CreateView):
-    template_name = 'contacts/contact_add.html'
+    template_name = 'bases/actions/base_add.html'
     model = Contact
     form_class = ContactForm
 
@@ -20,26 +20,50 @@ class ContactCreateView(CreateView):
         contact.save()
         return super().form_valid(form)
 
-
-class ContactDeleteView(DeleteView):
-    template_name = 'contacts/contact_delete.html'
-    model = Contact
-
-    def get_success_url(self):
-        return Customer.objects.get(pk=self.kwargs.get('id')).get_absolute_url()
+    def get_context_data(self, **kwargs):
+        context = super(ContactCreateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
 
 
 class ContactUpdateView(UpdateView):
-    template_name = 'contacts/contact_update.html'
+    template_name = 'bases/actions/base_update.html'
     form_class = ContactForm
     model = Contact
 
+    def get_object(self, queryset=None):
+        return Contact.objects.get(pk=self.kwargs.get('pk_contact'))
+
     def get_success_url(self):
-        return Customer.objects.get(pk=self.kwargs.get('id')).get_absolute_url()
+        return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super(ContactUpdateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
+
+class ContactDeleteView(DeleteView):
+    template_name = 'bases/actions/base_delete.html'
+    model = Contact
+
+    def get_object(self, queryset=None):
+        return Contact.objects.get(pk=self.kwargs.get('pk_contact'))
+
+    def get_success_url(self):
+        return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
+
+    def get_context_data(self, **kwargs):
+        context = super(ContactDeleteView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
 
 
 class ContactHistoryCreate(CreateView):
-    template_name = 'contacts/contact_add.html'
+    template_name = 'bases/actions/base_add.html'
     model = ContactHistory
 
     def get_success_url(self):
@@ -56,17 +80,26 @@ class ContactHistoryCreate(CreateView):
         contact_history.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(ContactHistoryCreate, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class ContactHistoryUpdate(UpdateView):
-    template_name = 'contacts/contact_update.html'
+    template_name = 'bases/actions/base_update.html'
     model = ContactHistory
 
+    def get_object(self, queryset=None):
+        return Contact.objects.get(pk=self.kwargs.get('pk_contact_history'))
+
     def get_success_url(self):
-        return Customer.objects.get(pk=self.kwargs.get('id')).get_absolute_url()
+        return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
 
     def get_form(self, form_class=ContactHistoryForm):
         form = super(ContactHistoryUpdate, self).get_form(form_class)
-        form.fields['contact'].queryset = Customer.objects.get(pk=self.kwargs.get('id')).contacts
+        form.fields['contact'].queryset = Customer.objects.get(pk=self.kwargs.get('pk')).contacts
         return form
 
     def form_valid(self, form):
@@ -75,10 +108,26 @@ class ContactHistoryUpdate(UpdateView):
         contact_history.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(ContactHistoryUpdate, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class ContactHistoryDelete(DeleteView):
-    template_name = 'contacts/contact_delete.html'
+    template_name = 'bases/actions/base_delete.html'
     model = ContactHistory
 
+    def get_object(self, queryset=None):
+        return Contact.objects.get(pk=self.kwargs.get('pk_contact_history'))
+
     def get_success_url(self):
-        return Customer.objects.get(pk=self.kwargs.get('id')).get_absolute_url()
+        return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
+
+
+def get_context_data(self, **kwargs):
+    context = super(ContactHistoryDelete, self).get_context_data(**kwargs)
+    context['previous'] = self.request.META.get('HTTP_REFERER')
+    context['model_name'] = self.model.__name__
+    return context

@@ -16,12 +16,12 @@ User = get_user_model()
 
 
 class ManagerCreateView(AtomicMixin, CreateView):
-    model = User
-    template_name = 'managers/manager_add.html'
+    model = Manager
+    template_name = 'bases/actions/base_add.html'
     form_class = ManagerForm
 
     def get_success_url(self):
-        return reverse_lazy('companies:managers:managers', kwargs={'slug': self.kwargs.get('company_slug')})
+        return reverse_lazy('companies:managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
     def form_valid(self, form):
         password = BaseUserManager().make_random_password()
@@ -32,7 +32,7 @@ class ManagerCreateView(AtomicMixin, CreateView):
         user.save()
         Manager.objects.create(
             user=user,
-            company=Company.objects.get(slug=self.kwargs.get('company_slug'))
+            company=Company.objects.get(slug=self.kwargs.get('slug'))
         )
         send_mail(
             subject='Your are invited to be an manager',
@@ -51,17 +51,29 @@ class ManagerCreateView(AtomicMixin, CreateView):
 
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(ManagerCreateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class ManagerDeleteView(DeleteView):
-    template_name = 'managers/manager_delete.html'
+    template_name = 'bases/actions/base_delete.html'
     model = User
 
     def get_success_url(self):
         return reverse_lazy('companies:managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
+    def get_context_data(self, **kwargs):
+        context = super(ManagerDeleteView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class ManagerUpdateView(UpdateView):
-    template_name = 'managers/manager_update.html'
+    template_name = 'bases/actions/base_update.html'
     model = User
 
     def get_success_url(self):
@@ -83,6 +95,12 @@ class ManagerUpdateView(UpdateView):
         manager.save()
 
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        context = super(ManagerUpdateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
 
 
 class ManagerListView(ListView):

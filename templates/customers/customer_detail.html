@@ -1,4 +1,4 @@
-{% extends 'companies/base.html' %}
+{% extends 'companies/../bases/company_base.html' %}
 
 {% block section_header %}
     <h1 class="h2">Customer profile</h1>
@@ -36,7 +36,7 @@
         <div class="row m-0 p-0" id="contacts">
             <div class="d-flex justify-content-between mt-2">
                 <h5>Contacts</h5>
-                <a href="{% url 'contacts:add' customer.pk %}" class="text-decoration-none">
+                <a href="{% url 'companies:customers:contacts:add' company.slug customer.pk %}" class="text-decoration-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-plus-circle text-success" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
@@ -49,7 +49,7 @@
                     <img src="{{ contact.picture.url }}" alt=""> {{ contact.value }}
                 </div>
                 <div class="col text-end">
-                    <a href="{% url 'contacts:update' customer.pk contact.pk %}"
+                    <a href="{% url 'companies:customers:contacts:update' company.slug customer.pk contact.pk %}"
                        class="text-decoration-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                              fill="currentColor"
@@ -59,7 +59,7 @@
                                   d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
                         </svg>
                     </a>
-                    <a href="{% url 'contacts:delete' customer.id contact.pk %}"
+                    <a href="{% url 'companies:customers:contacts:delete' company.slug customer.pk contact.pk %}"
                        class="text-decoration-none">
                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                              class="bi bi-trash text-danger" viewBox="0 0 16 16">
@@ -75,7 +75,8 @@
             {% endif %}
             <div class="d-flex justify-content-between mt-2">
                 <h5 class="my-2">Contact history</h5>
-                <a href="{% url 'contacts:add-history' customer.pk %}" class="text-decoration-none">
+                <a href="{% url 'companies:customers:contacts:add-history' company.slug customer.pk %}"
+                   class="text-decoration-none">
                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                          class="bi bi-plus-circle text-success" viewBox="0 0 16 16">
                         <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
@@ -105,7 +106,7 @@
                             <td>{{ contact.contact.value }}</td>
                             {% if request.user.is_manager %}
                                 <td class="text-end">
-                                    <a href="{% url 'contacts:update-history' customer.pk contact.pk %}"
+                                    <a href="{% url 'companies:customers:contacts:update-history' company.slug customer.pk contact.pk %}"
                                        class="text-decoration-none">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor"
@@ -115,7 +116,7 @@
                                                   d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5v11z"></path>
                                         </svg>
                                     </a>
-                                    <a href="{% url 'contacts:delete-history' customer.pk contact.pk %}"
+                                    <a href="{% url 'companies:customers:contacts:delete-history' company.slug customer.pk contact.pk %}"
                                        class="text-decoration-none">
                                         <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
                                              fill="currentColor"
@@ -152,8 +153,8 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    {% for product in customer.preferred_products.all %}
+                {% for product in customer.preferred_products.all %}
+                    <tr>
                         <th scope="row">{{ forloop.counter }}</th>
                         <td>{{ product.name }}</td>
                         <td>${{ product.price }}</td>
@@ -169,8 +170,8 @@
                                 </svg>
                             </a>
                         </td>
-                    {% endfor %}
-                </tr>
+                    </tr>
+                {% endfor %}
                 </tbody>
             </table>
         </div>

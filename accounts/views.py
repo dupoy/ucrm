@@ -39,16 +39,28 @@ class UserRegistrationView(FormView):
 
 
 class UserUpdateView(UpdateView):
-    template_name = 'accounts/profile_update.html'
+    template_name = 'bases/actions/base_update.html'
     form_class = UserUpdateForm
     model = User
     success_url = reverse_lazy('accounts:profile')
 
+    def get_context_data(self, **kwargs):
+        context = super(UserUpdateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class UserDeleteView(DeleteView):
-    template_name = 'accounts/profile_delete.html'
+    template_name = 'bases/actions/base_delete.html'
     success_url = reverse_lazy('landing')
     model = User
+
+    def get_context_data(self, **kwargs):
+        context = super(UserDeleteView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
 
 
 def activate(request, uidb64, token):

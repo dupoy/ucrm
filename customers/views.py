@@ -38,7 +38,7 @@ class CustomerDetailView(DetailView):
 
 
 class CustomerCreateView(CreateView):
-    template_name = 'customers/customer_add.html'
+    template_name = 'bases/actions/base_add.html'
     form_class = CustomerForm
     model = Customer
 
@@ -51,19 +51,35 @@ class CustomerCreateView(CreateView):
         customer.save()
         return super().form_valid(form)
 
+    def get_context_data(self, **kwargs):
+        context = super(CustomerCreateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        context['model_name'] = self.model.__name__
+        return context
+
 
 class CustomerUpdateView(UpdateView):
-    template_name = 'customers/customer_update.html'
+    template_name = 'bases/actions/base_update.html'
     model = Customer
     form_class = CustomerForm
 
     def get_success_url(self):
         return reverse_lazy('companies:customers:customers', kwargs={'slug': self.kwargs.get('slug')})
 
+    def get_context_data(self, **kwargs):
+        context = super(CustomerUpdateView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        return context
+
 
 class CustomerDeleteView(DeleteView):
-    template_name = 'customers/customer_delete.html'
+    template_name = 'bases/actions/base_delete.html'
     model = Customer
 
     def get_success_url(self):
         return reverse_lazy('companies:customers:customers', kwargs={'slug': self.kwargs.get('slug')})
+
+    def get_context_data(self, **kwargs):
+        context = super(CustomerDeleteView, self).get_context_data(**kwargs)
+        context['previous'] = self.request.META.get('HTTP_REFERER')
+        return context
