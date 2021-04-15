@@ -2,15 +2,13 @@ from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
-from django.views.generic import CreateView, DeleteView, UpdateView, ListView, DetailView
-
+from django.views.generic import CreateView, DeleteView, UpdateView, ListView
 from companies.models import Company
 from core.mixins import PreviousPageMixin, ModelNameMixin, LinkMixin
-from customers.models import Customer
-from managers.forms import ManagerForm, ManagerUpdateForm
+from managers.forms import ManagerForm
 from django.contrib.auth import get_user_model
 from companies.mixins import AtomicMixin
-from django.urls import reverse_lazy, resolve
+from django.urls import reverse_lazy
 from managers.models import Manager
 
 User = get_user_model()
@@ -37,7 +35,7 @@ class ManagerCreateView(AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateVi
         password = BaseUserManager().make_random_password()
         user = form.save(commit=False)
         user.set_password(password)
-        user.is_leader = False
+        user.is_director = False
         user.is_manager = True
         user.save()
         Manager.objects.create(
@@ -50,15 +48,6 @@ class ManagerCreateView(AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateVi
             from_email='admin@test.com',
             recipient_list=[user.email]
         )
-        current_site = get_current_site(self.request)
-        subject = 'You are invited to be an manager'
-        message = render_to_string('managers/mail.html', {
-            'user': user,
-            'domain': current_site.domain,
-            'password': password
-        })
-        user.email_user(subject=subject, message=message)
-
         return super().form_valid(form)
 
 
@@ -72,24 +61,9 @@ class ManagerDeleteView(PreviousPageMixin, DeleteView):
 
 class ManagerUpdateView(PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
+    form_class = ManagerForm
     model = User
 
     def get_success_url(self):
         return reverse_lazy('companies:managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
-    def get_form(self, form_class=ManagerUpdateForm):
-        form = super(ManagerUpdateView, self).get_form(form_class)
-        form.fields['companies'].queryset = self.request.user.companies
-        return form
-
-    def form_valid(self, form):
-        user = form.save(commit=False)
-        user.is_leader = False
-        user.is_manager = True
-        user.save()
-
-        manager = Manager.objects.get(user=user)
-        manager.company = form.cleaned_data['companies']
-        manager.save()
-
-        return super().form_valid(form)

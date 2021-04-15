@@ -9,7 +9,7 @@ class CompanyCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     form_class = CompanyForm
     model = Company
-    success_url = reverse_lazy('companies:list')
+    success_url = reverse_lazy('accounts:companies')
 
     def form_valid(self, form):
         company = form.save(commit=False)

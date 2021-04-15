@@ -10,5 +10,5 @@ class Manager(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='managers')
 
     def __str__(self):
-        return self.user.username
+        return self.user
 

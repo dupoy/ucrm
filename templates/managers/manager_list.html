@@ -24,7 +24,7 @@
             {% for manager in managers %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td>{{ manager.user.get_name }}</td>
+                    <td>{{ manager.user }}</td>
                     <td>{{ manager.user.email }}</td>
                     <td>{{ manager.user.phone }}</td>
                     <td class="d-flex justify-content-end">

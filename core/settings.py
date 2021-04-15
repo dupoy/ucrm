@@ -103,6 +103,6 @@ STATIC_ROOT = 'static_root'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = 'accounts.BasicUser'
 
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

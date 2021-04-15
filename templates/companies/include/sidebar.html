@@ -14,7 +14,7 @@
                         Dashboard
                     </a>
                 </li>
-                {% if request.user.is_leader %}
+                {% if request.user.is_director %}
                     <li class="nav-item">
                         <a class="nav-link {% if current_url == 'managers' %} active {% endif %}"
                            href="{% url 'companies:managers:managers' company.slug %}">

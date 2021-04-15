@@ -9,18 +9,7 @@ User = get_user_model()
 class ManagerForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar')
-
-    username = forms.CharField(
-        min_length=4, max_length=50,
-        help_text='(Required)',
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Username'
-            }
-        )
-    )
+        fields = ('first_name', 'last_name', 'email', 'phone', 'about', 'avatar')
 
     first_name = forms.CharField(
         min_length=4, max_length=50,
@@ -67,7 +56,7 @@ class ManagerForm(forms.ModelForm):
         )
     )
 
-    bio = forms.CharField(
+    about = forms.CharField(
         required=False,
         label='About you',
         widget=forms.Textarea(
@@ -87,12 +76,6 @@ class ManagerForm(forms.ModelForm):
         )
     )
 
-    def clean_username(self):
-        username = self.cleaned_data['username'].lower()
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Username is already exists.')
-        return username
-
     def clean_email(self):
         email = self.cleaned_data['email']
         if User.objects.filter(email=email).exists():
@@ -100,91 +83,3 @@ class ManagerForm(forms.ModelForm):
         return email
 
 
-class ManagerUpdateForm(forms.ModelForm):
-    class Meta:
-        model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar']
-
-    username = forms.CharField(
-        label='Username',
-        min_length=4, max_length=50,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Username'
-            }
-        )
-    )
-
-    first_name = forms.CharField(
-        label='First name',
-        min_length=4, max_length=50,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'First name'
-            }
-        )
-    )
-
-    last_name = forms.CharField(
-        label='Last name',
-        min_length=4, max_length=50,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Last name'
-            }
-        )
-    )
-
-    email = forms.EmailField(
-        max_length=100,
-        widget=forms.EmailInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'exapmple@domain.com'
-            }
-        )
-    )
-
-    phone = forms.RegexField(
-        label='Phone number',
-        regex=r'^\+?1?\d{9,15}$',
-        max_length=15,
-        widget=forms.TextInput(
-            attrs={
-                'placeholder': '+38(099)-999-99-99',
-                'class': 'form-control',
-            }
-        )
-    )
-
-    bio = forms.CharField(
-        required=False,
-        label='About you',
-        widget=forms.Textarea(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'About manager',
-            }
-        )
-    )
-
-    avatar = forms.FileField(
-        required=False,
-        widget=forms.FileInput(
-            attrs={
-                'class': 'form-control',
-            }
-        )
-    )
-
-    companies = forms.ModelChoiceField(
-        queryset=Company.objects.none(),
-        widget=forms.Select(
-            attrs={
-                'class': 'form-control',
-            }
-        )
-    )

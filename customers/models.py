@@ -17,7 +17,7 @@ class Customer(models.Model):
     date_of_birth = models.DateField()
     note = models.TextField(max_length=500, blank=True)
     company = models.ForeignKey(Company, on_delete=models.CASCADE, related_name='customers')
-    preferred_products = models.ManyToManyField(Product)
+    preferred_products = models.ManyToManyField(Product, blank=True)
     avatar = models.ImageField(upload_to=user_directory_path, default='default.png')
     medium_avatar = ImageSpecField(
         source='avatar',

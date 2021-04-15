@@ -11,14 +11,12 @@ class UserLoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(
         attrs={
             'class': 'form-control',
-            'placeholder': 'Username',
             'id': 'login-username'
         }
     ))
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={
             'class': 'form-control',
-            'placeholder': 'Password',
             'id': 'login-password'
         }
     ))
@@ -27,19 +25,7 @@ class UserLoginForm(AuthenticationForm):
 class UserRegistrationForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ('username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar')
-
-    username = forms.CharField(
-        label='Enter username',
-        min_length=4, max_length=50,
-        help_text='(Required)',
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Username'
-            }
-        )
-    )
+        fields = ('first_name', 'last_name', 'email', 'phone', 'about', 'avatar')
 
     first_name = forms.CharField(
         label='Enter first name',
@@ -107,7 +93,7 @@ class UserRegistrationForm(forms.ModelForm):
         )
     )
 
-    bio = forms.CharField(
+    about = forms.CharField(
         required=False,
         label='About you',
         widget=forms.Textarea(
@@ -128,12 +114,6 @@ class UserRegistrationForm(forms.ModelForm):
             }
         )
     )
-
-    def clean_username(self):
-        username = self.cleaned_data['username'].lower()
-        if User.objects.filter(username=username).exists():
-            raise forms.ValidationError('Username is already exists.')
-        return username
 
     def clean_password2(self):
         cd = self.cleaned_data
@@ -222,21 +202,9 @@ class UserPasswordChangeForm(PasswordChangeForm):
 class UserUpdateForm(forms.ModelForm):
     class Meta:
         model = User
-        fields = ['username', 'first_name', 'last_name', 'email', 'phone', 'bio', 'avatar']
-
-    username = forms.CharField(
-        label='Enter username',
-        min_length=4, max_length=50,
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'placeholder': 'Username'
-            }
-        )
-    )
+        fields = ['first_name', 'last_name', 'email', 'phone', 'about', 'avatar']
 
     first_name = forms.CharField(
-        label='Enter first name',
         min_length=4, max_length=50,
         widget=forms.TextInput(
             attrs={
@@ -247,7 +215,6 @@ class UserUpdateForm(forms.ModelForm):
     )
 
     last_name = forms.CharField(
-        label='Enter last name',
         min_length=4, max_length=50,
         widget=forms.TextInput(
             attrs={
@@ -279,7 +246,7 @@ class UserUpdateForm(forms.ModelForm):
         )
     )
 
-    bio = forms.CharField(
+    about = forms.CharField(
         required=False,
         label='About you',
         widget=forms.Textarea(

@@ -5,6 +5,7 @@ from django.db.models import Manager
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse_lazy
+from django.utils.text import slugify
 
 User = get_user_model()
 
@@ -20,6 +21,11 @@ class Company(models.Model):
     address = models.CharField(max_length=255, blank=True)
     phone = models.CharField(max_length=31, help_text='Contact phone number')
     email = models.EmailField(help_text='Contact email')
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super(Company, self).save(*args, **kwargs)
 
     def get_absolute_url(self):
         return reverse_lazy('companies:detail', args=[self.slug])

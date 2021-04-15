@@ -62,7 +62,7 @@ class CompanyForm(forms.ModelForm):
         help_text='(Required)',
         widget=forms.TextInput(
             attrs={
-                'placeholder': '+38(099)9999999',
+                'placeholder': '+380999999999',
                 'class': 'form-control',
             }
         )
