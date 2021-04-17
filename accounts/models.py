@@ -92,3 +92,6 @@ class BasicUser(PermissionsMixin, AbstractBaseUser):
 
     def __str__(self):
         return f'{self.first_name} {self.last_name}'
+
+    def get_name(self):
+        return f'{self.first_name} {self.last_name}'

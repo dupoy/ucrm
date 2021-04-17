@@ -1,8 +1,11 @@
 {% extends 'bases/base.html' %}
 
-{% block header %}
-    {% include 'accounts/include/header.html' %}
-{% endblock %}
+
+{% if request.user.is_director %}
+    {% block header %}
+        {% include 'accounts/include/header.html' %}
+    {% endblock %}
+{% endif %}
 
 {% block content %}
     <div class="container">
@@ -14,7 +17,7 @@
             {% with request.user as user %}
                 <div class="col-6 p-5">
                     <div class="d-flex">
-                        <h5>{{ user.username }}</h5>
+                        <h5>{{ user }}</h5>
                         <div class="px-2">
                             <a href="{% url 'accounts:profile-update' user.pk %}" class="text-decoration-none">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
@@ -36,16 +39,17 @@
                             </a>
                         </div>
                     </div>
-                    <h6 class="text-muted mt-2 mb-3">Personal info:</h6>
-                    <p><span class="fw-bold px-2">First name:</span> {{ user.first_name }}</p>
-                    <p><span class="fw-bold px-2">Last name:</span> {{ user.last_name }}</p>
-                    {% if user.bio %}
-                        <h6 class="text-muted my-3">Biography:</h6>
-                        <p class="px-2">{{ user.bio }}</p>
+                    {% if request.user.is_manager %}
+                        <p class="mt-2"><span
+                                class="text-muted h6">Company:</span> {{ user.manager.company.get_absolute_url }}</p>
                     {% endif %}
-                    <h6 class="text-muted my-3">Contact:</h6>
-                    <p><span class="fw-bold px-2">Email:</span> {{ user.email }}</p>
-                    <p><span class="fw-bold px-2">Phone:</span> {{ user.phone }}</p>
+                    {% if user.about %}
+                        <h6 class="text-muted my-3">About you:</h6>
+                        <p>{{ user.about }}</p>
+                    {% endif %}
+                    <h6 class="text-muted my-3">Contacts:</h6>
+                    <p><span class="fw-bold">Email:</span> {{ user.email }}</p>
+                    <p><span class="fw-bold">Phone:</span> {{ user.phone }}</p>
                 </div>
                 <div class="col-6 p-5 d-flex justify-content-center">
                     <img src="{{ user.medium_avatar.url }}" alt="avatar">

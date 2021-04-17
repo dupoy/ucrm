@@ -11,6 +11,9 @@ class ProductListView(LinkMixin, ListView):
     context_object_name = 'products'
     model = Product
 
+    def get_queryset(self):
+        return Product.objects.filter(company__slug=self.kwargs.get('slug'))
+
 
 class ProductCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'

@@ -5,8 +5,8 @@ from django.contrib.auth.views import (
 from accounts.forms import UserPasswordResetForm, UserPasswordResetConfirmForm, UserPasswordChangeForm, UserLoginForm
 from accounts.views import UserProfileView, activate, UserRegistrationView, UserUpdateView, UserDeleteView
 from django.urls import path
-
 from companies.views import CompanyListView, CompanyCreateView, CompanyUpdateView, CompanyDeleteView
+from managers.views import ManagerListView
 
 app_name = 'accounts'
 
@@ -48,6 +48,7 @@ urlpatterns = [
     path('profile/delete/<int:pk>/', UserDeleteView.as_view(), name='profile-delete'),
 
     path('profile/companies/', CompanyListView.as_view(), name='companies'),
+    path('profile/managers/', ManagerListView.as_view(template_name='managers/manager_list.html'), name='managers'),
     path('profile/companies/add/', CompanyCreateView.as_view(), name='companies-add'),
     path('profile/companies/update/<slug:slug>/', CompanyUpdateView.as_view(), name='companies-update'),
     path('profile/companies/delete/<slug:slug>/', CompanyDeleteView.as_view(), name='companies-delete'),

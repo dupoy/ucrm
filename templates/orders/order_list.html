@@ -1,0 +1,67 @@
+{% extends 'bases/company_base.html' %}
+
+
+{% block section_header %}
+    <h1 class="h2">Orders</h1>
+    {#    <a href="" type="button" class="btn btn-sm btn-outline-dark">#}
+    {#        Add order#}
+    {#    </a>#}
+{% endblock %}
+
+{% block section_content %}
+    <div class="table-responsive">
+        <table aria-label="orders" class="table border-0" id="orders">
+            <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">Order customer</th>
+                <th scope="col">Order summary</th>
+                <th scope="col">Created at</th>
+                <th scope="col">Order final price</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for order in orders %}
+                <tr>
+                    <th scope="col">{{ order.pk }}</th>
+                    <td>{{ order.customer }}</td>
+                    <td>
+                        <table class="table mb-0" aria-label="order_items">
+                            <thead>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Product</th>
+                                <th scope="col">Quantity</th>
+                                <th scope="col">Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for item in order.order_items.all %}
+                                <tr>
+                                    <th scope="col">{{ item.pk }}</th>
+                                    <td>{{ item.product }}</td>
+                                    <td>{{ item.quantity }}</td>
+                                    <td>{{ item.get_price }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </td>
+                    <td>{{ order.created_at }}</td>
+                    <td>{{ order.get_price }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.6.0.js"
+            integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+            crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            $('#orders').DataTable();
+        });
+    </script>
+{% endblock %}
+
+

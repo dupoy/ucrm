@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     'customers.apps.CustomersConfig',
     'contacts.apps.ContactsConfig',
     'products.apps.ProductsConfig',
+    'orders.apps.OrdersConfig',
 
     'imagekit',
 

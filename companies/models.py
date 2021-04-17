@@ -1,7 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.db.models import Manager
 from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from django.urls import reverse_lazy
@@ -36,7 +35,6 @@ class Company(models.Model):
 
 @receiver(pre_delete, sender=Company)
 def delete_company(sender, instance, **kwargs):
-    managers = Manager.objects.filter(company=instance)
-    for manager in managers:
+    for manager in instance.managers.all():
         user = User.objects.filter(manager=manager).first()
         user.delete()

@@ -25,5 +25,6 @@ class LinkMixin:
         if 'current_url' not in kwargs:
             kwargs['current_url'] = resolve(self.request.path_info).url_name
         if 'company' not in kwargs:
-            kwargs['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
+            if 'slug' in self.kwargs:
+                kwargs['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
         return super().get_context_data(**kwargs)

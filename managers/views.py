@@ -15,12 +15,18 @@ User = get_user_model()
 
 
 class ManagerListView(LinkMixin, ListView):
-    template_name = 'managers/manager_list.html'
+    template_name = 'managers/manager_company_list.html'
     model = Manager
     context_object_name = 'managers'
 
     def get_queryset(self):
-        return Company.objects.get(slug=self.kwargs.get('slug')).managers.all()
+        if 'slug' not in self.kwargs:
+            managers = []
+            for company in self.request.user.companies.all():
+                managers.extend(company.managers.all())
+            return managers
+        else:
+            return Company.objects.get(slug=self.kwargs.get('slug')).managers.all()
 
 
 class ManagerCreateView(AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateView):
@@ -66,4 +72,3 @@ class ManagerUpdateView(PreviousPageMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy('companies:managers:managers', kwargs={'slug': self.kwargs.get('slug')})
-
