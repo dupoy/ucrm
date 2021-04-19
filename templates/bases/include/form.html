@@ -1,0 +1,14 @@
+{% for field in form %}
+    <div class="mb-3">
+        <label class="small fw-bold">
+            {{ field.label_tag }}
+            {% if field.help_text %}
+                <span class="text-muted">{{ field.help_text|safe }}</span>
+            {% endif %}
+        </label>
+        {{ field }}
+        {% for error in field.errors %}
+            <p class="text-danger" style="font-size: 13px;">{{ error }}</p>
+        {% endfor %}
+    </div>
+{% endfor %}

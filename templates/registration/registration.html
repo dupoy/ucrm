@@ -1,38 +1,24 @@
-{% extends 'registration/base.html' %}
+{% extends 'bases/actions/base.html' %}
 
-{% block section %}
-
+{% block title_text %}
     {% if request.user.is_authenticated %}
         <script>
             window.location.href = '{% url 'accounts:profile' %}'
         </script>
     {% endif %}
-
-    <form action="{% url 'accounts:registration' %}" method="post">
-        {% csrf_token %}
-        <p class="h4 mb-2 fw-bold">Create an account</p>
-        <p class="mb-4">It's free and only takes a minute.</p>
-
-        {% for field in form %}
-            <div class="mb-3">
-                {{ field.errors }}
-                <label class="small fw-bold">
-                    {{ field.label_tag }}
-                    {% if field.help_text %}
-                        <span class="text-muted">{{ field.help_text|safe }}</span>
-                    {% endif %}
-                </label>
-                {{ field }}
-            </div>
-        {% endfor %}
-
-        <div class="d-grid gap-2">
-            <button class="btn btn-dark btn-block py-2 mt-3 fw-bold" type="submit">Sign-up</button>
-        </div>
-
-    </form>
-
-    <a class="text-muted" href="{% url 'accounts:login' %}">Already have an account?</a>
-    <a class="text-muted" href="{% url 'accounts:password-reset' %}">Forgotten Password?</a>
-
+    <p class="h4 mb-2 fw-bold">Create an account</p>
+    <p class="mb-4">It's free and only takes a minute.</p>
 {% endblock %}
+
+{% block button_text %}Sing-up{% endblock %}
+
+{% block additional_link %}
+    <a class="text-muted mx-3" href="{% url 'accounts:login' %}">Already have an account?</a>
+    <a class="text-muted" href="{% url 'accounts:password-reset' %}">Forgotten Password?</a>
+{% endblock %}
+
+
+
+
+
+

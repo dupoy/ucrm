@@ -44,10 +44,10 @@
                                 class="text-muted h6">Company:</span> {{ user.manager.company.get_absolute_url }}</p>
                     {% endif %}
                     {% if user.about %}
-                        <h6 class="text-muted my-3">About you:</h6>
+                        <h6 class="text-muted">About you:</h6>
                         <p>{{ user.about }}</p>
                     {% endif %}
-                    <h6 class="text-muted my-3">Contacts:</h6>
+                    <h6 class="text-muted">Contacts:</h6>
                     <p><span class="fw-bold">Email:</span> {{ user.email }}</p>
                     <p><span class="fw-bold">Phone:</span> {{ user.phone }}</p>
                 </div>

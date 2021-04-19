@@ -3,7 +3,7 @@
 {% block content %}
     <div class="container-fluid">
         <div class="row no-gutter">
-            <div class="col-md-3 bg-light">
+            <div class="col-md-4 bg-light">
                 <div class="login d-flex align-items-center py-5">
                     <div class="container">
                         <div class="row">
@@ -14,32 +14,23 @@
                                 <form method="post" enctype="multipart/form-data">
                                     {% csrf_token %}
 
-                                    {% for field in form %}
-                                        <div class="mb-3">
-                                            {{ field.errors }}
-                                            <label class="small fw-bold">
-                                                {{ field.label_tag }}
-                                                {% if field.help_text %}
-                                                    <span class="text-muted">{{ field.help_text|safe }}</span>
-                                                {% endif %}
-                                            </label>
-                                            {{ field }}
-                                        </div>
-                                    {% endfor %}
+                                    {% include 'bases/include/form.html' %}
 
                                     <div class="d-grid gap-2">
-                                        <button class="btn btn-dark btn-block py-2 fw-bold" type="submit"
-                                                value="Log In">
+                                        <button class="btn btn-dark btn-block py-2 fw-bold" type="submit">
                                             {% block button_text %}{% endblock %}
                                         </button>
                                     </div>
                                 </form>
+                                <div class="d-flex justify-content-end my-1">
+                                    {% block additional_link %}{% endblock %}
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-9 d-none d-md-flex bg-image"></div>
+            <div class="col-md-8 d-none d-md-flex bg-image"></div>
         </div>
     </div>
 {% endblock %}
