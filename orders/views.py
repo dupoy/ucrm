@@ -1,12 +1,12 @@
-from django.http import HttpResponse, HttpResponseRedirect
-from django.shortcuts import render
-from django.template import RequestContext
+from django.db.models import Sum
+from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, DeleteView
 from companies.models import Company
 from core.mixins import LinkMixin, ModelNameMixin, PreviousPageMixin
 from orders.forms import OrderItemForm, OrderForm
 from orders.models import Order, OrderItem
+from django.db.models.functions import TruncDate
 
 
 class OrderListView(LinkMixin, ListView):
@@ -75,3 +75,22 @@ class OrderItemDeleteView(DeleteView):
 
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
+
+def orders_charts(request, slug):
+    labels = []
+    data = []
+
+    queryset = OrderItem.objects.filter(order__customer__company__slug=slug).annotate(
+        order_date=TruncDate('order__created_at')).values('order_date').annotate(
+        order_summary=Sum('total_price')
+    ).order_by('-order_date')
+
+    for entry in queryset:
+        labels.append(entry['order_date'])
+        data.append(entry['order_summary'])
+
+    return JsonResponse(data={
+        'labels': labels,
+        'data': data
+    })
