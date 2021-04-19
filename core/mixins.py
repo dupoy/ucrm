@@ -23,7 +23,7 @@ class ModelNameMixin:
 class LinkMixin:
     def get_context_data(self, **kwargs):
         if 'current_url' not in kwargs:
-            kwargs['current_url'] = resolve(self.request.path_info).url_name
+            kwargs['current_url'] = resolve(self.request.path_info).app_names[-1]
         if 'company' not in kwargs:
             if 'slug' in self.kwargs:
                 kwargs['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
