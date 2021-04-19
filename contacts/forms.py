@@ -1,11 +1,6 @@
 from django import forms
-from django.forms.widgets import Input
-
 from contacts.models import Contact, ContactType, ContactHistory
-
-
-class DateTimePicker(Input):
-    input_type = 'datetime-local'
+from core.forms import DateTimePicker
 
 
 class ContactForm(forms.ModelForm):

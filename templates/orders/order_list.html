@@ -27,26 +27,31 @@
                     <th scope="col">{{ order.pk }}</th>
                     <td>{{ order.customer }}</td>
                     <td>
-                        <table class="table mb-0" aria-label="order_items">
-                            <thead>
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Product</th>
-                                <th scope="col">Quantity</th>
-                                <th scope="col">Price</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for item in order.order_items.all %}
+                        {% if order.order_items.all %}
+                            <table class="table mb-0" aria-label="order_items">
+                                <thead>
                                 <tr>
-                                    <th scope="col">{{ item.pk }}</th>
-                                    <td>{{ item.product }}</td>
-                                    <td>{{ item.quantity }}</td>
-                                    <td>{{ item.get_price }}</td>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Product</th>
+                                    <th scope="col">Quantity</th>
+                                    <th scope="col">Price</th>
                                 </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
+                                </thead>
+                                <tbody>
+                                {% for item in order.order_items.all %}
+                                    <tr>
+                                        <th scope="col">{{ item.pk }}</th>
+                                        <td>{{ item.product }}</td>
+                                        <td>{{ item.quantity }}</td>
+                                        <td>{{ item.total_price }}</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            No product yet.
+                        {% endif %}
+
                     </td>
                     <td>{{ order.created_at }}</td>
                     <td>{{ order.get_price }}</td>

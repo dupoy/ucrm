@@ -1,12 +1,12 @@
 from django.db import models
-
+from django.utils import timezone
 from customers.models import Customer
 from products.models import Product
 
 
 class Order(models.Model):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders', blank=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='orders')
+    created_at = models.DateTimeField(default=timezone.now)
 
     def __str__(self):
         return f'Order by {self.customer}, created at {self.created_at.date()}'
@@ -19,7 +19,7 @@ class Order(models.Model):
 
 
 class OrderItem(models.Model):
-    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items', blank=True)
+    order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name='order_items')
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     total_price = models.DecimalField(decimal_places=2, max_digits=13, default=0)
     quantity = models.IntegerField(default=1)

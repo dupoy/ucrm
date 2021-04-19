@@ -1,26 +1,33 @@
 from django import forms
 
+from core.forms import DateTimePicker
 from orders.models import OrderItem, Order
 
 
 class OrderForm(forms.ModelForm):
     class Meta:
         model = Order
-        exclude = ['created_at', ]
+        fields = '__all__'
 
         widgets = {
             'customer': forms.Select(
                 attrs={
                     'class': 'form-control',
                 }
-            )
+            ),
+            'created_at': DateTimePicker(
+                attrs={
+                    'id': 'datetime-id',
+                    'class': 'form-control',
+                }
+            ),
         }
 
 
 class OrderItemForm(forms.ModelForm):
     class Meta:
         model = OrderItem
-        exclude = ['order']
+        exclude = ['order', 'total_price']
 
         widgets = {
             'product': forms.Select(
