@@ -1,0 +1,32 @@
+{% extends 'bases/company_base.html' %}
+
+{% block section_header %}
+    <h1 class="h2">Create order</h1>
+{% endblock %}
+
+{% block section_content %}
+    <div class="row">
+        <div class="col-12 col-md-12  mx-auto">
+            <form method="post" enctype="multipart/form-data">
+                {% csrf_token %}
+                {% for field in form %}
+                    <div class="mb-3">
+                        {{ field.errors }}
+                        <label class="small fw-bold">
+                            {{ field.label_tag }}
+                            {% if field.help_text %}
+                                <span class="text-muted">{{ field.help_text|safe }}</span>
+                            {% endif %}
+                        </label>
+                        {{ field }}
+                    </div>
+                {% endfor %}
+                <div class="d-grid gap-2">
+                    <button class="btn btn-dark btn-block py-2 fw-bold" type="submit">
+                        Go to order filling
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

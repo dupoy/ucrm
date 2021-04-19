@@ -23,7 +23,7 @@
             {% for product in products %}
                 <tr>
                     <th scope="row">{{ forloop.counter }}</th>
-                    <td><a href="" class="text-decoration-none">{{ product.name }}</a></td>
+                    <td>{{ product.name }}</td>
                     <td>${{ product.price }}</td>
                     <td class="d-flex justify-content-end">
                         <a href="{% url 'companies:products:update' company.slug product.slug %}"
