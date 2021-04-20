@@ -1,5 +1,7 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.sites.shortcuts import get_current_site
+from accounts.token import account_activation_token
+
 from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView
@@ -48,12 +50,18 @@ class ManagerCreateView(AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateVi
             user=user,
             company=Company.objects.get(slug=self.kwargs.get('slug'))
         )
-        send_mail(
-            subject='Your are invited to be an manager',
-            message='You were added as an agent do UCRM. Please come login to start working.',
-            from_email='admin@test.com',
-            recipient_list=[user.email]
-        )
+
+        current_site = get_current_site(self.request)
+        subject = 'Your are invited to be an manager'
+        message = render_to_string('managers/mail.html', {
+            'message': 'You were added as an agent do UCRM. Please come login to start working.',
+            'name': user.get_name(),
+            'email': user.email,
+            'password': password,
+            'domain': current_site.domain,
+        })
+        user.email_user(subject=subject, message=message)
+
         return super().form_valid(form)
 
 

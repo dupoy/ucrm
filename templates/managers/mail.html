@@ -1,10 +1,8 @@
 {% autoescape off %}
-    Hello {{ user.get_name }},
+    Hello {{ name }},
 
-    Your username: {{ user.username }}
+    Your email: {{ email }}
     Your password: {{ password }}
 
-    Please click link below to login in your account
-
-    http://{{ domain }}{% url 'accounts:login' %}
+    Please click link below to login in your account: http://{{ domain }}{% url 'accounts:login' %}
 {% endautoescape %}

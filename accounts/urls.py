@@ -1,6 +1,6 @@
 from django.contrib.auth.views import (
     LoginView, LogoutView, PasswordResetView,
-    PasswordResetConfirmView, PasswordChangeView,
+    PasswordResetConfirmView, PasswordChangeView, PasswordResetDoneView
 )
 from accounts.forms import UserPasswordResetForm, UserPasswordResetConfirmForm, UserPasswordChangeForm, UserLoginForm
 from accounts.views import UserProfileView, activate, UserRegistrationView, UserUpdateView, UserDeleteView
@@ -22,23 +22,23 @@ urlpatterns = [
              template_name='registration/logout.html'),
          name='logout'),
 
-    path('password-reset/',
+    path('password_reset/',
          PasswordResetView.as_view(
              template_name='registration/password_reset_form.html',
-             form_class=UserPasswordResetForm),
-         name='password-reset'),
+             form_class=UserPasswordResetForm,),
+         name='password_reset'),
 
-    path('password-reset-confirm/<uidb64>/<token>',
+    path('password_reset_confirm/<uidb64>/<token>',
          PasswordResetConfirmView.as_view(
              template_name='registration/password_reset_confirm.html',
              form_class=UserPasswordResetConfirmForm),
-         name="password-reset-confirm"),
+         name='password_reset_confirm'),
 
     path('password_change/',
          PasswordChangeView.as_view(
              template_name="registration/password_change_form.html",
              form_class=UserPasswordChangeForm),
-         name='password-change'),
+         name='password_change'),
 
     path('activate/<uidb64>/<token>/', activate, name='activate'),
     path('registration/', UserRegistrationView.as_view(), name='registration'),

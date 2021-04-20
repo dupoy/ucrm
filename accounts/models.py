@@ -1,5 +1,6 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
+from django.core.mail import send_mail
 from django.db import models
 from imagekit.processors import ResizeToFill
 from imagekit.models import ImageSpecField
@@ -59,7 +60,7 @@ class CustomAccountManager(BaseUserManager):
 
 class BasicUser(PermissionsMixin, AbstractBaseUser):
     is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=True)
 
     is_director = models.BooleanField(default=False)
     is_manager = models.BooleanField(default=False)
@@ -95,3 +96,6 @@ class BasicUser(PermissionsMixin, AbstractBaseUser):
 
     def get_name(self):
         return f'{self.first_name} {self.last_name}'
+
+    def email_user(self, subject, message, from_email=None, **kwargs):
+        send_mail(subject, message, from_email, [self.email], **kwargs)

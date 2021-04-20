@@ -1,5 +1,6 @@
 {% extends 'bases/actions/base.html' %}
 
+
 {% block title_text %}
     {% if request.user.is_authenticated %}
         <script>
@@ -12,9 +13,7 @@
 {% block button_text %}Sing-In{% endblock %}
 
 {% block additional_link %}
-        <a class="text-muted mx-3" href="{% url 'accounts:password-reset' %}">Forgotten Password?</a>
-        <a class="text-muted" href="{% url 'accounts:registration' %}">Don't have an account?</a>
+    <a class="text-muted mx-3" href="{% url 'accounts:password_reset' %}">Forgotten Password?</a>
+    <a class="text-muted" href="{% url 'accounts:registration' %}">Don't have an account?</a>
 {% endblock %}
-
-
 
