@@ -1,12 +1,9 @@
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.sites.shortcuts import get_current_site
-from accounts.token import account_activation_token
-
-from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.views.generic import CreateView, DeleteView, UpdateView, ListView
 from companies.models import Company
-from core.mixins import PreviousPageMixin, ModelNameMixin, LinkMixin
+from core.mixins import PreviousPageMixin, ModelNameMixin, LinkMixin, PermissionMixin
 from managers.forms import ManagerForm
 from django.contrib.auth import get_user_model
 from companies.mixins import AtomicMixin
@@ -16,7 +13,7 @@ from managers.models import Manager
 User = get_user_model()
 
 
-class ManagerListView(LinkMixin, ListView):
+class ManagerListView(PermissionMixin, LinkMixin, ListView):
     template_name = 'managers/manager_company_list.html'
     model = Manager
     context_object_name = 'managers'
@@ -31,7 +28,7 @@ class ManagerListView(LinkMixin, ListView):
             return Company.objects.get(slug=self.kwargs.get('slug')).managers.all()
 
 
-class ManagerCreateView(AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateView):
+class ManagerCreateView(PermissionMixin, AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateView):
     model = Manager
     template_name = 'bases/actions/base_add.html'
     form_class = ManagerForm
@@ -65,7 +62,7 @@ class ManagerCreateView(AtomicMixin, ModelNameMixin, PreviousPageMixin, CreateVi
         return super().form_valid(form)
 
 
-class ManagerDeleteView(PreviousPageMixin, DeleteView):
+class ManagerDeleteView(PermissionMixin, PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     model = User
 
@@ -73,7 +70,7 @@ class ManagerDeleteView(PreviousPageMixin, DeleteView):
         return reverse_lazy('companies:managers:managers', kwargs={'slug': self.kwargs.get('slug')})
 
 
-class ManagerUpdateView(PreviousPageMixin, UpdateView):
+class ManagerUpdateView(PermissionMixin, PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     form_class = ManagerForm
     model = User

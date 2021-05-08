@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import DeleteView, CreateView, UpdateView
 
 from contacts.forms import ContactForm, ContactHistoryForm
@@ -6,7 +7,7 @@ from core.mixins import PreviousPageMixin, ModelNameMixin
 from customers.models import Customer
 
 
-class ContactCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
+class ContactCreateView(LoginRequiredMixin, ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     model = Contact
     form_class = ContactForm
@@ -22,7 +23,7 @@ class ContactCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
         return super().form_valid(form)
 
 
-class ContactUpdateView(PreviousPageMixin, UpdateView):
+class ContactUpdateView(LoginRequiredMixin, PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     form_class = ContactForm
     model = Contact
@@ -34,7 +35,7 @@ class ContactUpdateView(PreviousPageMixin, UpdateView):
         return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
 
 
-class ContactDeleteView(PreviousPageMixin, DeleteView):
+class ContactDeleteView(LoginRequiredMixin,PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     model = Contact
 
@@ -45,7 +46,7 @@ class ContactDeleteView(PreviousPageMixin, DeleteView):
         return Customer.objects.get(pk=self.kwargs.get('pk')).get_absolute_url()
 
 
-class ContactHistoryCreate(ModelNameMixin, PreviousPageMixin, CreateView):
+class ContactHistoryCreate(LoginRequiredMixin, ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     model = ContactHistory
 
@@ -64,7 +65,7 @@ class ContactHistoryCreate(ModelNameMixin, PreviousPageMixin, CreateView):
         return super().form_valid(form)
 
 
-class ContactHistoryUpdate(PreviousPageMixin, UpdateView):
+class ContactHistoryUpdate(LoginRequiredMixin, PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     model = ContactHistory
 
@@ -86,7 +87,7 @@ class ContactHistoryUpdate(PreviousPageMixin, UpdateView):
         return super().form_valid(form)
 
 
-class ContactHistoryDelete(PreviousPageMixin, DeleteView):
+class ContactHistoryDelete(LoginRequiredMixin, PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     model = ContactHistory
 

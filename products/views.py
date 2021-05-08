@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView
 from companies.models import Company
@@ -6,7 +7,7 @@ from products.forms import ProductForm
 from products.models import Product
 
 
-class ProductListView(LinkMixin, ListView):
+class ProductListView(LoginRequiredMixin, LinkMixin, ListView):
     template_name = 'products/product_list.html'
     context_object_name = 'products'
     model = Product
@@ -15,7 +16,7 @@ class ProductListView(LinkMixin, ListView):
         return Product.objects.filter(company__slug=self.kwargs.get('slug'))
 
 
-class ProductCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
+class ProductCreateView(LoginRequiredMixin, ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     model = Product
     form_class = ProductForm
@@ -33,7 +34,7 @@ class ProductCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
         return Company.objects.get(slug=self.kwargs['slug']).products.all()
 
 
-class ProductUpdateView(PreviousPageMixin, UpdateView):
+class ProductUpdateView(LoginRequiredMixin, PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     slug_url_kwarg = 'product_slug'
     form_class = ProductForm
@@ -43,7 +44,7 @@ class ProductUpdateView(PreviousPageMixin, UpdateView):
         return reverse_lazy('companies:products:products', kwargs={'slug': self.kwargs.get('slug')})
 
 
-class ProductDeleteView(PreviousPageMixin, DeleteView):
+class ProductDeleteView(LoginRequiredMixin, PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     slug_url_kwarg = 'product_slug'
     model = Product

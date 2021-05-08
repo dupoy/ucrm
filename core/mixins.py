@@ -1,5 +1,7 @@
 import re
 
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.shortcuts import redirect
 from django.urls import resolve
 
 from companies.models import Company
@@ -28,3 +30,10 @@ class LinkMixin:
             if 'slug' in self.kwargs:
                 kwargs['company'] = Company.objects.get(slug=self.kwargs.get('slug'))
         return super().get_context_data(**kwargs)
+
+
+class PermissionMixin(LoginRequiredMixin):
+    def dispatch(self, request, *args, **kwargs):
+        if not request.user.is_director:
+            return redirect('accounts:profile')
+        return super().dispatch(request, *args, **kwargs)

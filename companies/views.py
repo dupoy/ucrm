@@ -1,11 +1,12 @@
-from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView, FormView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 from companies.forms import CompanyForm
-from django.urls import reverse_lazy, resolve
+from django.urls import reverse_lazy
 from companies.models import Company
-from core.mixins import PreviousPageMixin, ModelNameMixin, LinkMixin
+from core.mixins import PreviousPageMixin, ModelNameMixin, LinkMixin, PermissionMixin
 
 
-class CompanyCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
+class CompanyCreateView(PermissionMixin, ModelNameMixin, PreviousPageMixin, CreateView):
     template_name = 'bases/actions/base_add.html'
     form_class = CompanyForm
     model = Company
@@ -18,7 +19,7 @@ class CompanyCreateView(ModelNameMixin, PreviousPageMixin, CreateView):
         return super().form_valid(form)
 
 
-class CompanyListView(ListView):
+class CompanyListView(PermissionMixin, ListView):
     template_name = 'companies/company_list.html'
     model = Company
     context_object_name = 'companies'
@@ -27,20 +28,20 @@ class CompanyListView(ListView):
         return Company.objects.filter(user=self.request.user)
 
 
-class CompanyDetailView(LinkMixin, DetailView):
+class CompanyDetailView(LoginRequiredMixin, LinkMixin, DetailView):
     template_name = 'companies/company_detail.html'
     context_object_name = 'company'
     model = Company
 
 
-class CompanyUpdateView(PreviousPageMixin, UpdateView):
+class CompanyUpdateView(PermissionMixin, PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     form_class = CompanyForm
     model = Company
     success_url = reverse_lazy('accounts:companies')
 
 
-class CompanyDeleteView(PreviousPageMixin, DeleteView):
+class CompanyDeleteView(PermissionMixin, PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     success_url = reverse_lazy('accounts:profile')
     model = Company

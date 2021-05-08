@@ -1,3 +1,4 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.utils.encoding import force_bytes, force_text
@@ -13,7 +14,7 @@ from core.mixins import PreviousPageMixin
 User = get_user_model()
 
 
-class UserProfileView(TemplateView):
+class UserProfileView(LoginRequiredMixin, TemplateView):
     template_name = 'accounts/profile_detail.html'
 
 
@@ -39,14 +40,14 @@ class UserRegistrationView(FormView):
         return super().form_valid(form)
 
 
-class UserUpdateView(PreviousPageMixin, UpdateView):
+class UserUpdateView(LoginRequiredMixin, PreviousPageMixin, UpdateView):
     template_name = 'bases/actions/base_update.html'
     form_class = UserUpdateForm
     model = User
     success_url = reverse_lazy('accounts:profile')
 
 
-class UserDeleteView(PreviousPageMixin, DeleteView):
+class UserDeleteView(LoginRequiredMixin, PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     success_url = reverse_lazy('landing')
     model = User

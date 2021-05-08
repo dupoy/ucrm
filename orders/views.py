@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Sum
 from django.http import HttpResponseRedirect, JsonResponse
 from django.urls import reverse_lazy
@@ -9,7 +11,7 @@ from orders.models import Order, OrderItem
 from django.db.models.functions import TruncDate
 
 
-class OrderListView(LinkMixin, ListView):
+class OrderListView(LoginRequiredMixin, LinkMixin, ListView):
     template_name = 'orders/order_list.html'
     model = Order
     context_object_name = 'orders'
@@ -21,7 +23,7 @@ class OrderListView(LinkMixin, ListView):
         return orders
 
 
-class OrderCreateView(LinkMixin, CreateView):
+class OrderCreateView(LoginRequiredMixin, LinkMixin, CreateView):
     template_name = 'orders/order_create.html'
     model = Order
     form_class = OrderForm
@@ -30,7 +32,7 @@ class OrderCreateView(LinkMixin, CreateView):
         return reverse_lazy('companies:orders:add-item', kwargs={'slug': self.kwargs['slug'], 'pk': self.object.pk})
 
 
-class OrderDeleteView(ModelNameMixin, PreviousPageMixin, DeleteView):
+class OrderDeleteView(LoginRequiredMixin, ModelNameMixin, PreviousPageMixin, DeleteView):
     template_name = 'bases/actions/base_delete.html'
     model = Order
 
@@ -38,7 +40,7 @@ class OrderDeleteView(ModelNameMixin, PreviousPageMixin, DeleteView):
         return reverse_lazy('companies:orders:orders', kwargs={'slug': self.kwargs['slug']})
 
 
-class OrderItemCreateView(LinkMixin, CreateView):
+class OrderItemCreateView(LoginRequiredMixin, LinkMixin, CreateView):
     template_name = 'orders/order_add_item.html'
     model = OrderItem
     form_class = OrderItemForm
@@ -64,7 +66,7 @@ class OrderItemCreateView(LinkMixin, CreateView):
         return self.request.path
 
 
-class OrderItemDeleteView(DeleteView):
+class OrderItemDeleteView(LoginRequiredMixin, DeleteView):
     model = OrderItem
 
     def get_object(self, queryset=None):
@@ -77,6 +79,7 @@ class OrderItemDeleteView(DeleteView):
         return self.post(request, *args, **kwargs)
 
 
+@login_required
 def orders_charts(request, slug):
     labels = []
     data = []
