@@ -40,7 +40,6 @@ class ManagerCreateView(PermissionMixin, AtomicMixin, ModelNameMixin, PreviousPa
         password = BaseUserManager().make_random_password()
         user = form.save(commit=False)
         user.set_password(password)
-        user.is_director = False
         user.is_manager = True
         user.save()
         Manager.objects.create(

@@ -96,6 +96,7 @@ class UserRegistrationForm(forms.ModelForm):
     about = forms.CharField(
         required=False,
         label='About you',
+        max_length=500,
         widget=forms.Textarea(
             attrs={
                 'class': 'form-control',
