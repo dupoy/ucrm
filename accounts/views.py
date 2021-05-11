@@ -26,7 +26,7 @@ class UserRegistrationView(FormView):
     def form_valid(self, form):
         user = form.save(commit=False)
         user.set_password(form.cleaned_data['password'])
-        user.is_active = True
+        user.is_director = True
         user.is_active = False
         user.save()
         current_site = get_current_site(self.request)
