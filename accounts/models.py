@@ -1,4 +1,5 @@
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import AbstractUser, PermissionsMixin
 from django.core.mail import send_mail
 from django.db import models
@@ -78,3 +79,8 @@ class BasicUser(PermissionsMixin, AbstractBaseUser):
 
     def email_user(self, subject, message, from_email=None, **kwargs):
         send_mail(subject, message, from_email, [self.email], **kwargs)
+
+    def save(self, *args, **kwargs):
+        if not self.id and not self.is_staff and not self.is_superuser:
+            self.password = make_password(self.password)
+        super().save(*args, **kwargs)
